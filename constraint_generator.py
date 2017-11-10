@@ -81,4 +81,23 @@ class ConstraintGenerator:
         return constraints
 
     def _generate_single_side_neighbor(self, k):
-        pass
+        if self.num_wizards < 4:
+            raise ValueError("This generator requires a value of N >= 4")
+        constraints = []
+        for i in range(self.num_wizards - 2):
+            constraints.append([
+                self.wizards[i + 1],
+                self.wizards[i + 2],
+                self.wizards[i],
+            ])
+        constraints.append([
+            self.wizards[self.num_wizards - 4],
+            self.wizards[self.num_wizards - 3],
+            self.wizards[self.num_wizards - 2],
+        ])
+        constraints.append([
+            self.wizards[self.num_wizards - 3],
+            self.wizards[self.num_wizards - 2],
+            self.wizards[self.num_wizards - 1],
+        ])
+        return constraints
