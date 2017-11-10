@@ -82,7 +82,9 @@ class ConstraintGenerator(object):
             )
             target = selected_count_to_wizard_list[current_level][selection_level_target_index]
             target_index = self.wizards.index(target)
-            selected_count_to_wizard_list[current_level].pop(selection_level_target_index)
+            selected_count_to_wizard_list[current_level].pop(
+                selection_level_target_index
+            )
             selected_count_to_wizard_list[current_level + 1].append(target)
             if not selected_count_to_wizard_list[current_level]:
                 current_level += 1
