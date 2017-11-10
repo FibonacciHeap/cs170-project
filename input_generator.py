@@ -54,7 +54,7 @@ class DifficultInputGenerator:
         for k in k_list:
             avg_first_tictoc, avg_solution_count = 0, 0
             for _ in range(reps):
-                constraints = self.generate_constraint(n, k)
+                constraints = self.generate_constraint(k)
                 if constraints is None:
                     # We should only reach here if k is a number such that no
                     # valid input problem of size n and k constraints can be
