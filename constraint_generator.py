@@ -18,6 +18,8 @@ class ConstraintGenerator(object):
     """Enum constants for generator type"""
     RANDOM = 0
     SINGLE_SIDE_NEIGHBOR = 1
+    BALANCED = 2
+    INWARD_MERGE = 3
     # Add more as necessary here
 
     def __init__(self, n, generator_type=0):
@@ -38,6 +40,10 @@ class ConstraintGenerator(object):
             return self._generate_random(k)
         elif self.gen_type == ConstraintGenerator.SINGLE_SIDE_NEIGHBOR:
             return self._generate_single_side_neighbor(k)
+        elif self.gen_type == ConstraintGenerator.BALANCED:
+            return self._generate_balanced(k)
+        elif self.gen_type == ConstraintGenerator.INWARD_MERGE:
+            return self._generate_inward_merge(k)
         # Add more as necessary here
 
     def _generate_random(self, k):
@@ -117,3 +123,9 @@ class ConstraintGenerator(object):
             self.wizards[self.num_wizards - 1],
         ])
         return constraints
+
+    def _generate_balanced(self, k):
+        pass
+
+    def _generate_inward_merge(self, k):
+        pass

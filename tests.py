@@ -13,6 +13,14 @@ class TestConstraintGenerator(unittest.TestCase):
             self.num_wizards,
             ConstraintGenerator.SINGLE_SIDE_NEIGHBOR,
         )
+        self.balanced_cg = ConstraintGenerator(
+            self.num_wizards,
+            ConstraintGenerator.BALANCED,
+        )
+        self.inward_merge_cg = ConstraintGenerator(
+            self.num_wizards,
+            ConstraintGenerator.INWARD_MERGE,
+        )
 
     def test_random_cg(self):
         constraints = self.random_cg.generate(self.num_constraints)
@@ -41,6 +49,12 @@ class TestConstraintGenerator(unittest.TestCase):
             # test each constraint is from a group of 3 adjacent wizards
             self.assertTrue(abs(_constraint[2] - _constraint[0]) <= 2)
             self.assertTrue(abs(_constraint[1] - _constraint[0]) <= 2)
+
+    def test_balanced_cg(self):
+        pass
+
+    def test_inward_merge_cg(self):
+        pass
 
 
 if __name__ == '__main__':
