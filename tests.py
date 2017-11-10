@@ -18,8 +18,9 @@ class TestConstraintGenerator(unittest.TestCase):
         constraints = self.random_cg.generate(self.num_constraints)
         # test generated constraints are valid
         for constraint in constraints:
-            self.assertFalse(constraint[0] < constraint[2] < constraint[1])
-            self.assertFalse(constraint[1] < constraint[2] < constraint[0])
+            _constraint = [int(i) for i in constraint]
+            self.assertFalse(_constraint[0] < _constraint[2] < _constraint[1])
+            self.assertFalse(_constraint[1] < _constraint[2] < _constraint[0])
 
         # test each group of NUM_WIZARDS constraints have unique target wizards
         wizards_picked = set()
@@ -30,7 +31,16 @@ class TestConstraintGenerator(unittest.TestCase):
             wizards_picked.add(constraint[2])
 
     def test_ssn_cg(self):
-        pass
+        constraints = self.ssn_cg.generate(self.num_constraints)
+
+        for constraint in constraints:
+            _constraint = [int(i) for i in constraint]
+            # test generated constraints are valid
+            self.assertFalse(_constraint[0] < _constraint[2] < _constraint[1])
+            self.assertFalse(_constraint[1] < _constraint[2] < _constraint[0])
+            # test each constraint is from a group of 3 adjacent wizards
+            self.assertTrue(abs(_constraint[2] - _constraint[0]) <= 2)
+            self.assertTrue(abs(_constraint[1] - _constraint[0]) <= 2)
 
 
 if __name__ == '__main__':
