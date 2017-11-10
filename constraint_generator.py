@@ -117,22 +117,29 @@ class ConstraintGenerator(object):
         if self.num_wizards < 4:
             raise ValueError("This generator requires a value of N >= 4")
         constraints = []
-        for i in range(self.num_wizards - 2):
-            constraints.append([
-                self.wizards[i + 1],
-                self.wizards[i + 2],
-                self.wizards[i],
-            ])
-        constraints.append([
-            self.wizards[self.num_wizards - 4],
-            self.wizards[self.num_wizards - 3],
-            self.wizards[self.num_wizards - 2],
-        ])
-        constraints.append([
-            self.wizards[self.num_wizards - 3],
-            self.wizards[self.num_wizards - 2],
-            self.wizards[self.num_wizards - 1],
-        ])
+        for j in range(k):
+            selector = [1,2]
+            random.shuffle(selector)
+
+            i = j % self.num_wizards
+            if i == self.num_wizards - 2:
+                constraints.append([
+                    self.wizards[self.num_wizards - 2 - selector[0]],
+                    self.wizards[self.num_wizards - 2 - selector[1]],
+                    self.wizards[self.num_wizards - 2],
+                ])
+            elif i == self.num_wizards - 1:
+                constraints.append([
+                    self.wizards[self.num_wizards - 1 - selector[0]],
+                    self.wizards[self.num_wizards - 1 - selector[1]],
+                    self.wizards[self.num_wizards - 1],
+                ])
+            else:
+                constraints.append([
+                    self.wizards[i + selector[0]],
+                    self.wizards[i + selector[1]],
+                    self.wizards[i],
+                ])
         return constraints
 
     def _generate_balanced(self, k):
@@ -141,7 +148,49 @@ class ConstraintGenerator(object):
         random constraint generator, except balances choices of the two left
         wizards, as well as the TARGET wizard.
         """
-        pass
+        # Tracks how many times each wizard has been used as a
+        # right-hand variable in a constraint, in order to enforce
+        # the heuristic that repeated use makes the problem easier.
+        # selected_count_to_wizard_list = {
+        #     i: list() for i in range(1, k // self.num_wizards + 1)
+        # }
+        # selected_count_to_wizard_list[0] = [
+        #     self.wizards[i] for i in range(self.num_wizards)
+        # ]
+        # current_level = 0
+        # constraints = []
+        # for i in range(k):
+        #     # Pick a target wizard for our constraint. Selection should be
+        #     # uniformly random from the lowest possible selection level.
+        #     selection_level_target_index = random.randint(
+        #         0,
+        #         len(selected_count_to_wizard_list[current_level]) - 1,
+        #     )
+        #     target = selected_count_to_wizard_list[current_level][selection_level_target_index]
+        #     target_index = self.wizards.index(target)
+        #     selected_count_to_wizard_list[current_level].pop(
+        #         selection_level_target_index
+        #     )
+        #     selected_count_to_wizard_list[current_level + 1].append(target)
+        #     if not selected_count_to_wizard_list[current_level]:
+        #         current_level += 1
+        #
+        #     # Pick two other wizards for the constraint. Should be a random
+        #     # choice for the lowest available selection level
+        #     selection_range = [0, self.num_wizards - 1]
+        #     if target_index < self.num_wizards / 2:
+        #         selection_range[0] = target_index + 1
+        #     else:
+        #         selection_range[1] = target_index - 1
+        #     first, second = None, None
+        #     while first == second:
+        #         first = random.randint(*selection_range)
+        #         second = random.randint(*selection_range)
+        #     first, second = self.wizards[first], self.wizards[second]
+        #
+        #     constraints.append([first, second, target])
+        #
+        # return constraints
 
     def _generate_inward_merge(self, k):
         """
