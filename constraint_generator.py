@@ -1,6 +1,20 @@
 import random
 
 class ConstraintGenerator:
+    """
+    Constraint Generator class.
+
+    Collection of methods to generate constraint lists, formatted as
+    a list of 3-tuples of type string, where each 3-tuple is of the form
+    (wizard_1, wizard_2, wizard_3), corresponding to the constraint:
+
+    !(wizard_1 < wizard_3 < wizard_2 or wizard_2 < wizard_3 < wizard_1)
+
+    Implements a set of generator methods, each of which corresponds to a
+    heuristic optimized for hardness of compututation, as well as benchmarks
+    for testing their efficacy.
+    """
+
     """Enum constants for generator type"""
     RANDOM = 0
     SINGLE_SIDE_NEIGHBOR = 1
@@ -18,7 +32,7 @@ class ConstraintGenerator:
 
     def generate(self, k):
         """
-        Dispatch routine to call the appropriate Constraint Generator function
+        Dispatch routine to call the appropriate Constraint Generator function 
         """
         if self.gen_type = ConstraintGenerator.RANDOM:
             return self._generate_random(k)
