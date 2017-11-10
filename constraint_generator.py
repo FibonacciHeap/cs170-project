@@ -1,6 +1,6 @@
 import random
 
-class ConstraintGenerator:
+class ConstraintGenerator(object):
     """
     Constraint Generator class.
 
@@ -20,15 +20,15 @@ class ConstraintGenerator:
     SINGLE_SIDE_NEIGHBOR = 1
     # Add more as necessary here
 
-    def ___init__(self, n, generator_type=0):
+    def __init__(self, n, generator_type=0):
         """
         Input:
             n: number of magicians in the input problem
         """
         self.num_wizards = n
-        self.gen_type = gen_type
+        self.gen_type = generator_type
         # could change later to actual names if desired
-        self.wizards = [str(i) for i in range(num_wizards)]
+        self.wizards = [str(i) for i in range(self.num_wizards)]
 
     def generate(self, k):
         """
@@ -65,13 +65,14 @@ class ConstraintGenerator:
         for i in range(k):
             # Pick a target wizard for our constraint. Selection should be
             # uniformly random from the lowest possible selection level.
-            target = random.choice(
-                selected_count_to_wizard_list[current_level]
+            selection_level_target_index = random.randint(
+                0,
+                len(selected_count_to_wizard_list[current_level]) - 1,
             )
+            target = selected_count_to_wizard_list[current_level][selection_level_target_index]
             target_index = self.wizards.index(target)
-            selected_count_to_wizard_list[current_level + 1].append(
-                selected_count_to_wizard_list[current_level].pop(target)
-            )
+            selected_count_to_wizard_list[current_level].pop(selection_level_target_index)
+            selected_count_to_wizard_list[current_level + 1].append(target)
             if not selected_count_to_wizard_list[current_level]:
                 current_level += 1
 
@@ -80,14 +81,15 @@ class ConstraintGenerator:
             # 1: The two wizards are not the same and are not TARGET
             # 2: The two wizards are both from the SAME side of TARGET
             # 3: The two wizards are chosen from the larger free side of TARGET
-            selection_range = (0, self.num_wizards - 1)
+            selection_range = [0, self.num_wizards - 1]
             if target_index < self.num_wizards / 2:
                 selection_range[0] = target_index + 1
             else:
                 selection_range[1] = target_index - 1
             first, second = None, None
-            while first != second:
-                first, second = randint(*selection_range), randint(*selection_range)
+            while first == second:
+                first = random.randint(*selection_range)
+                second = random.randint(*selection_range)
             first, second = self.wizards[first], self.wizards[second]
 
             constraints.append([first, second, target])
