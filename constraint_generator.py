@@ -18,6 +18,8 @@ class ConstraintGenerator(object):
     """Enum constants for generator type"""
     RANDOM = 0
     SINGLE_SIDE_NEIGHBOR = 1
+    BALANCED = 2
+    INWARD_MERGE = 3
     # Add more as necessary here
 
     def __init__(self, n, generator_type=0):
@@ -32,16 +34,10 @@ class ConstraintGenerator(object):
 
     def generate(self, k):
         """
-        Dispatch routine to call the appropriate Constraint Generator function
-        """
-        if self.gen_type == ConstraintGenerator.RANDOM:
-            return self._generate_random(k)
-        elif self.gen_type == ConstraintGenerator.SINGLE_SIDE_NEIGHBOR:
-            return self._generate_single_side_neighbor(k)
-        # Add more as necessary here
+        Dispatch routine to call the appropriate Constraint Generator function.
 
-    def _generate_random(self, k):
-        """
+        All generate functions have the following interface:
+
         Input:
             k: number of constraints to generate
 
@@ -50,6 +46,21 @@ class ConstraintGenerator(object):
             3-tuple is of the form (wizard_1, wizard_2, wizard_3),
             corresponding to the constraint:
             !(wizard_1 < wizard_3 < wizard_2 or wizard_2 < wizard_3 < wizard_1)
+        """
+        if self.gen_type == ConstraintGenerator.RANDOM:
+            return self._generate_random(k)
+        elif self.gen_type == ConstraintGenerator.SINGLE_SIDE_NEIGHBOR:
+            return self._generate_single_side_neighbor(k)
+        elif self.gen_type == ConstraintGenerator.BALANCED:
+            return self._generate_balanced(k)
+        elif self.gen_type == ConstraintGenerator.INWARD_MERGE:
+            return self._generate_inward_merge(k)
+        # Add more as necessary here
+
+    def _generate_random(self, k):
+        """
+        Random generator. For each TARGET wizard, selects two random wizards
+        on the larger empty side of TARGET, and generates a cosntraint.
         """
         # Tracks how many times each wizard has been used as a
         # right-hand variable in a constraint, in order to enforce
@@ -71,7 +82,9 @@ class ConstraintGenerator(object):
             )
             target = selected_count_to_wizard_list[current_level][selection_level_target_index]
             target_index = self.wizards.index(target)
-            selected_count_to_wizard_list[current_level].pop(selection_level_target_index)
+            selected_count_to_wizard_list[current_level].pop(
+                selection_level_target_index
+            )
             selected_count_to_wizard_list[current_level + 1].append(target)
             if not selected_count_to_wizard_list[current_level]:
                 current_level += 1
@@ -97,6 +110,10 @@ class ConstraintGenerator(object):
         return constraints
 
     def _generate_single_side_neighbor(self, k):
+        """
+        Single sided neighbor generator. For each TARGET wizard, creates a
+        constraint from the two immediate neighbors to a single side of TARGET.
+        """
         if self.num_wizards < 4:
             raise ValueError("This generator requires a value of N >= 4")
         constraints = []
@@ -117,3 +134,21 @@ class ConstraintGenerator(object):
             self.wizards[self.num_wizards - 1],
         ])
         return constraints
+
+    def _generate_balanced(self, k):
+        """
+        Balanced constraint generator. Functions in the same manner as the
+        random constraint generator, except balances choices of the two left
+        wizards, as well as the TARGET wizard.
+        """
+        pass
+
+    def _generate_inward_merge(self, k):
+        """
+        Inward Merge constraint generator. Creates constraints by starting at
+        the wizard list endpoints, choosing a TARGET to the far right, and two
+        other wizards to the far left. On the next iteration, the right and left
+        choices move inward, until a single constaint exists for each choice of
+        TARGET.
+        """
+        pass
