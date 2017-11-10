@@ -20,7 +20,7 @@ class ConstraintGenerator:
     SINGLE_SIDE_NEIGHBOR = 1
     # Add more as necessary here
 
-    def ___init__(self, n, generator_type=ConstraintGenerator.RANDOM):
+    def ___init__(self, n, generator_type=0):
         """
         Input:
             n: number of magicians in the input problem
@@ -32,11 +32,11 @@ class ConstraintGenerator:
 
     def generate(self, k):
         """
-        Dispatch routine to call the appropriate Constraint Generator function 
+        Dispatch routine to call the appropriate Constraint Generator function
         """
-        if self.gen_type = ConstraintGenerator.RANDOM:
+        if self.gen_type == ConstraintGenerator.RANDOM:
             return self._generate_random(k)
-        elif self.gen_type = ConstraintGenerator.SINGLE_SIDE_NEIGHBOR:
+        elif self.gen_type == ConstraintGenerator.SINGLE_SIDE_NEIGHBOR:
             return self._generate_single_side_neighbor(k)
         # Add more as necessary here
 
