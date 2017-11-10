@@ -10,7 +10,8 @@ class TestConstraintGenerator(unittest.TestCase):
             self.num_wizards, ConstraintGenerator.RANDOM
         )
         self.ssn_cg = ConstraintGenerator(
-            self.num_wizards, ConstraintGenerator.SINGLE_SIDE_NEIGHBOR
+            self.num_wizards,
+            ConstraintGenerator.SINGLE_SIDE_NEIGHBOR,
         )
 
     def test_random_cg(self):
