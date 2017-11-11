@@ -48,8 +48,8 @@ class MagicianAgeOrderingSolver(object):
                 if (not solution_found):
                     solution_found = True
                     t2 = time.time()
- 
-        print('\n',solution_count, '\n')
+
+        #print('\n',solution_count, '\n')
 
         return t2 - t1, solution_count
 
@@ -58,8 +58,8 @@ class MagicianAgeOrderingSolver(object):
         Returning all possible permutations of the original list of wizards that we have.
         """
         return list(itertools.permutations(self.wizard_list))
-    
-   
+
+
     def check_constraints(self, wizard_ordering, constraints):
         """
         This function checks a given ordering against our generated constraints
@@ -67,7 +67,7 @@ class MagicianAgeOrderingSolver(object):
         """
 
         d = {k: v for v, k in enumerate(wizard_ordering)}
-		
+
         for c in constraints:
             if not ((d[c[2]] < d[c[1]]
                 and  d[c[2]] < d[c[0]])
@@ -75,4 +75,3 @@ class MagicianAgeOrderingSolver(object):
                 and  d[c[2]] > d[c[0]])):
             	return False
         return True
-
