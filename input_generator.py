@@ -56,11 +56,13 @@ class DifficultInputGenerator:
         logging.debug("Experiment: n = {0}, starting k = {1}".format(n, start_k))
         avg_first_tictoc_list, avg_solution_count_list = [], []
         max_first_tictoc_list, max_solution_count_list = [], []
+        min_first_tictoc_list, min_solution_count_list = [], []
         k_list = list(range(start_k, self.max_num_constraints + 1))
         for k in k_list:
             logging.debug("Trying k = {0}".format(k))
             avg_first_tictoc, avg_solution_count = 0, 0
             max_first_tictoc, max_solution_count = 0, 0
+            min_first_tictoc, min_solution_count = float("inf"), float("inf")
             for _ in range(reps):
                 print("Iteration {0}/{1}".format(_ + 1, reps), end='\r')
                 constraints = self.generate_constraint(k)
@@ -76,12 +78,16 @@ class DifficultInputGenerator:
                 avg_solution_count += solution_count
                 max_first_tictoc = max(max_first_tictoc, first_tictoc)
                 max_solution_count = max(max_solution_count, solution_count)
+                min_first_tictoc = min(min_first_tictoc, first_tictoc)
+                min_solution_count = min(min_solution_count, solution_count)
             avg_first_tictoc /= reps
             avg_solution_count /= reps
             avg_first_tictoc_list.append(avg_first_tictoc)
             avg_solution_count_list.append(avg_solution_count)
             max_first_tictoc_list.append(max_first_tictoc)
             max_solution_count_list.append(max_solution_count)
+            min_first_tictoc_list.append(min_first_tictoc)
+            min_solution_count_list.append(min_solution_count)
 
         # 2. Save experiments
         logging.debug("Saving results...")
@@ -90,26 +96,38 @@ class DifficultInputGenerator:
             "AverageFirstTictocList": avg_first_tictoc_list,
             "AverageSolutionCountList": avg_solution_count_list,
             "MaxFirstTictocList": max_first_tictoc_list,
-            "MaxSolutionCountList": max_solution_count_list
+            "MaxSolutionCountList": max_solution_count_list,
+            "MinFirstTictocList": min_first_tictoc_list,
+            "MinSolutionCountList": min_solution_count_list
         }
         self.save_results(result_logs)
         logging.debug("Results saved!")
 
         # 3. Plot results
         logging.debug("Plotting results...")
-        self.show_plot("k vs. Average Solution Count", k_list,
-            avg_solution_count_list, "k", "Avg Solution Count")
+
+        # Average plotting
+        self.show_plot("k vs. Average Solution Count for N = {0}".format(n),
+            k_list, avg_solution_count_list, "k", "Avg Solution Count")
         scaled_avg_first_tictoc_list = [i/j for i, j in \
             zip(avg_first_tictoc_list, k_list)]
-        self.show_plot("k vs. Scaled Average Time to First Solution", k_list,
-            scaled_avg_first_tictoc_list, "k", "Scaled Avg Time to 1st Solution")
-        self.show_plot("k vs. Average Time to First Solution", k_list,
-            avg_first_tictoc_list, "k", "Avg Time to 1st Solution", "red")
+        self.show_plot("k vs. Scaled Avg Time to 1st Solution for N = {0}" \
+            .format(n), k_list, scaled_avg_first_tictoc_list, "k", \
+            "Scaled Avg Time to 1st Solution")
+        self.show_plot("k vs. Avg Time to 1st Solution for N = {0}".format(n),
+            k_list, avg_first_tictoc_list, "k", "Avg Time to 1st Solution", "r")
 
-        self.show_plot("k vs. Max Solution Count", k_list,
+        # Max plotting
+        self.show_plot("k vs. Max Solution Count for N = {0}".format(n), k_list,
             max_solution_count_list, "k", "Max Solution Count", "orange")
-        self.show_plot("k vs. Max Time to First Solution", k_list,
-            max_first_tictoc_list, "k", "Max Time to 1st Solution", "orange")
+        self.show_plot("k vs. Max Time to First Solution for N = {0}".format(n),
+            k_list, max_first_tictoc_list, "k", "Max Time to 1st Solution", "orange")
+
+        # Min plotting
+        self.show_plot("k vs. Min Solution Count for N = {0}".format(n), k_list,
+            min_solution_count_list, "k", "Min Solution Count", "orange")
+        self.show_plot("k vs. Min Time to First Solution for N = {0}".format(n),
+            k_list, min_first_tictoc_list, "k", "Min Time to 1st Solution", "orange")
         logging.debug("Done plotting.")
 
         # 4. Analyze and return final result
