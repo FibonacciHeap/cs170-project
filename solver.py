@@ -44,7 +44,7 @@ class MagicianAgeOrderingSolver(object):
             if self.check_constraints(wizard_ordering, constraints):
                 solution_count +=1
                 if (not solution_found):
-                    solution_found = true
+                    solution_found = True
                     t2 = time.time()
 
         return t2 - t1, solution_count
@@ -55,12 +55,12 @@ class MagicianAgeOrderingSolver(object):
         """
         return list(itertools.permutations(self.wizard_list))
 
-    def check_constraints(self, wizard_ordering, c):
+    def check_constraints(self, wizard_ordering, constraints):
         """
         This function checks a given ordering against our generated constraints
         and that the wizards fall in locations valid for this. c is the constraint tuple.
         """
-        for c in contraints:
+        for c in constraints:
             if ((wizard_ordering.index(c[1]) < wizard_ordering.index(c[0])
                 and  wizard_ordering.index(c[1]) < wizard_ordering.index(c[2]))
                 or  (wizard_ordering.index(c[1]) > wizard_ordering.index(c[0])
