@@ -18,7 +18,7 @@ class DifficultInputGenerator:
 
     MAX_NUM_CONSTRAINTS = 500
 
-    def __init__(self, generate_constraint, solve_problem):
+    def __init__(self, generate_constraint, solve_problem, max_constraints = 500):
         """
         Constructs the Input Generator object given a constraint generation
         function (which returns a set of constraints given a number of magicians
@@ -27,6 +27,7 @@ class DifficultInputGenerator:
         """
         self.generate_constraint = generate_constraint
         self.solve_problem = solve_problem
+        self.max_num_constraints = min(self.MAX_NUM_CONSTRAINTS, max_constraints)
 
     def find_best_constraint_to_magicians_ratio(self, n, start_k = 1, reps = 1000):
         """
@@ -54,7 +55,7 @@ class DifficultInputGenerator:
         # 1. Perform experiments
         logging.debug("Experiment: n = {0}, k = {1}".format(n, start_k))
         avg_first_tictoc_list, avg_solution_count_list = [], []
-        k_list = list(range(start_k, self.MAX_NUM_CONSTRAINTS))
+        k_list = list(range(start_k, self.max_num_constraints + 1))
         for k in k_list:
             logging.debug("Trying k = {0}".format(k))
             avg_first_tictoc, avg_solution_count = 0, 0
@@ -75,14 +76,17 @@ class DifficultInputGenerator:
             avg_solution_count_list.append(avg_solution_count)
 
         # 2. Save experiments
+        logging.debug("Saving results...")
         result_logs = {
             "MagicianNumber": n,
             "AverageFirstTictocList": avg_first_tictoc_list,
             "AverageSolutionCountList": avg_solution_count_list
         }
         self.save_results(result_logs)
+        logging.debug("Results saved!")
 
         # 3. Plot results
+        logging.debug("Plotting results...")
         self.show_plot("k vs. Average Solution Count", k_list,
             avg_solution_count_list, "k", "Avg Solution Count")
         scaled_avg_first_tictoc_list = [i/j for i, j in \
@@ -91,6 +95,7 @@ class DifficultInputGenerator:
             scaled_avg_first_tictoc_list, "k", "Scaled Avg Time to 1st Solution")
         self.show_plot("k vs. Average Time to First Solution", k_list,
             avg_first_tictoc_list, "k", "Avg Time to 1st Solution", "r")
+        logging.debug("Done plotting.")
 
         # 4. Analyze and return final result
         best_k_1 = np.argmin(avg_solution_count_list) + 1
