@@ -53,12 +53,14 @@ class DifficultInputGenerator:
                    magicians n
         """
         # 1. Perform experiments
-        logging.debug("Experiment: n = {0}, k = {1}".format(n, start_k))
+        logging.debug("Experiment: n = {0}, starting k = {1}".format(n, start_k))
         avg_first_tictoc_list, avg_solution_count_list = [], []
+        max_first_tictoc_list, max_solution_count_list = [], []
         k_list = list(range(start_k, self.max_num_constraints + 1))
         for k in k_list:
             logging.debug("Trying k = {0}".format(k))
             avg_first_tictoc, avg_solution_count = 0, 0
+            max_first_tictoc, max_solution_count = 0, 0
             for _ in range(reps):
                 print("Iteration {0}/{1}".format(_ + 1, reps), end='\r')
                 constraints = self.generate_constraint(k)
@@ -70,10 +72,14 @@ class DifficultInputGenerator:
                 first_tictoc, solution_count = self.solve_problem(constraints)
                 avg_first_tictoc += first_tictoc
                 avg_solution_count += solution_count
+                max_first_tictoc = max(max_first_tictoc, first_tictoc)
+                max_solution_count = max(max_solution_count, solution_count)
             avg_first_tictoc /= reps
             avg_solution_count /= reps
             avg_first_tictoc_list.append(avg_first_tictoc)
             avg_solution_count_list.append(avg_solution_count)
+            max_first_tictoc_list.append(max_first_tictoc)
+            max_solution_count_list.append(max_solution_count)
 
         # 2. Save experiments
         logging.debug("Saving results...")
@@ -94,7 +100,12 @@ class DifficultInputGenerator:
         self.show_plot("k vs. Scaled Average Time to First Solution", k_list,
             scaled_avg_first_tictoc_list, "k", "Scaled Avg Time to 1st Solution")
         self.show_plot("k vs. Average Time to First Solution", k_list,
-            avg_first_tictoc_list, "k", "Avg Time to 1st Solution", "r")
+            avg_first_tictoc_list, "k", "Avg Time to 1st Solution", "red")
+
+        self.show_plot("k vs. Max Solution Count", k_list,
+            max_solution_count_list, "k", "Max Solution Count", "orange")
+        self.show_plot("k vs. Max Time to First Solution", k_list,
+            max_first_tictoc_list, "k", "Max Time to 1st Solution", "orange")
         logging.debug("Done plotting.")
 
         # 4. Analyze and return final result
