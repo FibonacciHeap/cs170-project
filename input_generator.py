@@ -88,7 +88,9 @@ class DifficultInputGenerator:
         result_logs = {
             "MagicianNumber": n,
             "AverageFirstTictocList": avg_first_tictoc_list,
-            "AverageSolutionCountList": avg_solution_count_list
+            "AverageSolutionCountList": avg_solution_count_list,
+            "MaxFirstTictocList": max_first_tictoc_list,
+            "MaxSolutionCountList": max_solution_count_list
         }
         self.save_results(result_logs)
         logging.debug("Results saved!")
