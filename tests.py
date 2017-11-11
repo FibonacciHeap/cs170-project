@@ -24,10 +24,15 @@ class TestConstraintGenerator(unittest.TestCase):
 
     def test_random_cg(self):
         constraints = self.random_cg.generate(self.num_constraints)
+        print(constraints)
         # test generated constraints are valid
         for constraint in constraints:
             _constraint = [int(i) for i in constraint]
+            if (_constraint[0] < _constraint[2] < _constraint[1]):
+                print('ERROR: ', _constraint[0], _constraint[1], _constraint[2])
             self.assertFalse(_constraint[0] < _constraint[2] < _constraint[1])
+            if (_constraint[1] < _constraint[2] < _constraint[0]):
+                print('ERROR: ', _constraint[0], _constraint[1], _constraint[2])
             self.assertFalse(_constraint[1] < _constraint[2] < _constraint[0])
 
         # test each group of NUM_WIZARDS constraints have unique target wizards
@@ -77,13 +82,16 @@ class TestConstraintGenerator(unittest.TestCase):
 
     def test_inward_merge_cg(self):
         constraints = self.inward_merge_cg.generate(self.num_constraints)
-        print(constraints)
+        # print(constraints)
 
         for constraint in constraints:
             _constraint = [int(i) for i in constraint]
             # test generated constraints are valid
             self.assertFalse(_constraint[0] < _constraint[2] < _constraint[1])
             self.assertFalse(_constraint[1] < _constraint[2] < _constraint[0])
+            # self.assertNotEqual(_constraint[0], _constraint[1])
+            # self.assertNotEqual(_constraint[1], _constraint[2])
+            # self.assertNotEqual(_constraint[0], _constraint[2])
 
         # test that known solution satisfies all constraints
         solution = self.inward_merge_cg.wizards
