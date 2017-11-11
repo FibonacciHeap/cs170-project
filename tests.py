@@ -38,6 +38,13 @@ class TestConstraintGenerator(unittest.TestCase):
             self.assertNotIn(constraint[2], wizards_picked)
             wizards_picked.add(constraint[2])
 
+        for i in range(self.num_wizards):
+            wizard = str(i)
+            for constraint in constraints:
+                if constraints[2] == wizard:
+                    self.assertFalse(constraint[0] < wizard < constraint[1])
+                    self.assertFalse(constraint[1] < wizard < constraint[0])
+
     def test_ssn_cg(self):
         constraints = self.ssn_cg.generate(self.num_constraints)
 
