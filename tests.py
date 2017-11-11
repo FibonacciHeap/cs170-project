@@ -39,8 +39,8 @@ class TestConstraintGenerator(unittest.TestCase):
             wizards_picked.add(constraint[2])
 
         # test that known solution satisfies all constraints
-        for i in range(self.num_wizards):
-            wizard = str(i)
+        solution = self.random_cg.wizards
+        for wizard in solution:
             for constraint in constraints:
                 if constraints[2] == wizard:
                     self.assertFalse(constraint[0] < wizard < constraint[1])
@@ -59,8 +59,8 @@ class TestConstraintGenerator(unittest.TestCase):
             self.assertTrue(abs(_constraint[1] - _constraint[0]) <= 2)
 
         # test that known solution satisfies all constraints
-        for i in range(self.num_wizards):
-            wizard = str(i)
+        solution = self.ssn_cg.wizards
+        for wizard in solution:
             for constraint in constraints:
                 if constraints[2] == wizard:
                     self.assertFalse(constraint[0] < wizard < constraint[1])
@@ -79,8 +79,8 @@ class TestConstraintGenerator(unittest.TestCase):
             self.assertFalse(_constraint[1] < _constraint[2] < _constraint[0])
 
         # test that known solution satisfies all constraints
-        for i in range(self.num_wizards):
-            wizard = str(i)
+        solution = self.inward_merge_cg.wizards
+        for wizard in solution:
             for constraint in constraints:
                 if constraints[2] == wizard:
                     self.assertFalse(constraint[0] < wizard < constraint[1])
