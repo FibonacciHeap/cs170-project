@@ -65,5 +65,5 @@ class MagicianAgeOrderingSolver(object):
                 and  wizard_ordering.index(c[1]) < wizard_ordering.index(c[2]))
                 or  (wizard_ordering.index(c[1]) > wizard_ordering.index(c[0])
                 and  wizard_ordering.index(c[1]) > wizard_ordering.index(c[2]))):
-                return false
-        return true
+                return False
+        return True
