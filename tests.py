@@ -4,7 +4,7 @@ from constraint_generator import ConstraintGenerator
 
 class TestConstraintGenerator(unittest.TestCase):
     def setUp(self):
-        self.num_wizards = 6
+        self.num_wizards = 5
         self.num_constraints = 50
         self.random_cg = ConstraintGenerator(
             self.num_wizards, ConstraintGenerator.RANDOM
@@ -77,6 +77,7 @@ class TestConstraintGenerator(unittest.TestCase):
 
     def test_inward_merge_cg(self):
         constraints = self.inward_merge_cg.generate(self.num_constraints)
+        print(constraints)
 
         for constraint in constraints:
             _constraint = [int(i) for i in constraint]
