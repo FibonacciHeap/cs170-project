@@ -34,7 +34,7 @@ class MagicianAgeOrderingSolver(object):
 		and given the constraints that we have generated, will test the ordering for validity.  
 		"""
 		solution_count = 0
-		solution_found = false
+		solution_found = False
 
 		#t2 is initially set to t1, if no asnwer is found, the time will be zero.
 		t1 = time.time()
