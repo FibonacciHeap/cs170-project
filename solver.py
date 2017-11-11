@@ -48,6 +48,8 @@ class MagicianAgeOrderingSolver(object):
                 if (not solution_found):
                     solution_found = True
                     t2 = time.time()
+ 
+        print('\n',solution_count, '\n')
 
         return t2 - t1, solution_count
 
@@ -67,10 +69,10 @@ class MagicianAgeOrderingSolver(object):
         d = {k: v for v, k in enumerate(wizard_ordering)}
 		
         for c in constraints:
-            if ((d[c[1]] < d[c[0]]
-                and  d[c[1]] < d[c[2]])
-                or  (d[c[1]] > d[c[0]]
-                and  d[c[1]] > d[c[2]])):
+            if not ((d[c[2]] < d[c[1]]
+                and  d[c[2]] < d[c[0]])
+                or  (d[c[2]] > d[c[1]]
+                and  d[c[2]] > d[c[0]])):
             	return False
         return True
 
