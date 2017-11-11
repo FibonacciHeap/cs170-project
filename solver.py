@@ -41,7 +41,7 @@ class MagicianAgeOrderingSolver(object):
         t2 = t1
 
         for wizard_ordering in self.wizard_permutations:
-            if check_constraints(wizard_ordering, constraints):
+            if self.check_constraints(wizard_ordering, constraints):
                 solution_count +=1
                 if (not solution_found):
                     solution_found = true
