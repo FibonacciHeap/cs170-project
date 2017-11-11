@@ -66,7 +66,7 @@ class ConstraintGenerator(object):
         # right-hand variable in a constraint, in order to enforce
         # the heuristic that repeated use makes the problem easier.
         selected_count_to_wizard_list = {
-            i: list() for i in range(1, k // self.num_wizards + 1)
+            i: list() for i in range(1, self.num_wizards + 1)
         }
         selected_count_to_wizard_list[0] = [
             self.wizards[i] for i in range(self.num_wizards)
