@@ -60,7 +60,7 @@ class DifficultInputGenerator:
                     # valid input problem of size n and k constraints can be
                     # generated.
                     break
-                first_tictoc, solution_count = solve_problem(constraints)
+                first_tictoc, solution_count = self.solve_problem(constraints)
                 avg_first_tictoc += first_tictoc
                 avg_solution_count += solution_count
             avg_first_tictoc /= reps
