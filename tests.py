@@ -54,7 +54,13 @@ class TestConstraintGenerator(unittest.TestCase):
         pass
 
     def test_inward_merge_cg(self):
-        pass
+        constraints = self.inward_merge_cg.generate(self.num_constraints)
+
+        for constraint in constraints:
+            _constraint = [int(i) for i in constraint]
+            # test generated constraints are valid
+            self.assertFalse(_constraint[0] < _constraint[2] < _constraint[1])
+            self.assertFalse(_constraint[1] < _constraint[2] < _constraint[0])
 
 
 if __name__ == '__main__':

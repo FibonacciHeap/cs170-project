@@ -200,4 +200,23 @@ class ConstraintGenerator(object):
         choices move inward, until a single constaint exists for each choice of
         TARGET.
         """
-        pass
+        constraints = []
+        end = self.num_wizards
+        for j in range(k):
+            i = j % self.num_wizards
+            end = end % self.num_wizards
+            selector = [1,2]
+            random.shuffle(selector)
+            if self.num_wizards % 2 == 0 and i == self.num_wizards // 2 - 1:
+                selector[0] -= 1
+                selector[1] -= 1
+            elif self.num_wizards % 2 == 1 and i == self.num_wizards // 2:
+                selector[0] += 1
+                selector[1] += 1
+            constraints.append([
+                self.wizards[end - selector[0]],
+                self.wizards[end - selector[1]],
+                self.wizards[i],
+            ])
+            end -= 1
+        return constraints
