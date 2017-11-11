@@ -114,9 +114,9 @@ class DifficultInputGenerator:
 
         # 4. Analyze and return final result
         best_k_1 = np.argmin(avg_solution_count_list) + 1
-        print("Best k based on figure 1: {0}".format(best_k_1))
+        print("Best k based on 'solution count' figure: {0}".format(best_k_1))
         best_k_2 = np.argmax(scaled_avg_first_tictoc_list) + 1
-        print("Best k based on figure 2: {0}".format(best_k_2))
+        print("Best k based on 'scaled time' figure: {0}".format(best_k_2))
 
         avg_best_k = best_k_1 + best_k_2 // 2 # not necessarily true, but...
         final_ratio = avg_best_k / n
