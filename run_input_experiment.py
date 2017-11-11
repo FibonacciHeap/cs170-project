@@ -2,7 +2,7 @@ from input_generator import DifficultInputGenerator
 from constraint_generator import ConstraintGenerator
 from solver import MagicianAgeOrderingSolver
 
-N = 5
+N = 6
 constraint_constructor = ConstraintGenerator(N, ConstraintGenerator.RANDOM)
 problem_solver = MagicianAgeOrderingSolver(N, MagicianAgeOrderingSolver.RANDOM)
 input_generator = DifficultInputGenerator(constraint_constructor.generate, \
