@@ -54,16 +54,21 @@ class MagicianAgeOrderingSolver(object):
         Returning all possible permutations of the original list of wizards that we have.
         """
         return list(itertools.permutations(self.wizard_list))
-
+    
+   
     def check_constraints(self, wizard_ordering, constraints):
         """
         This function checks a given ordering against our generated constraints
         and that the wizards fall in locations valid for this. c is the constraint tuple.
         """
+
+        d = {k: v for v, k in enumerate(wizard_ordering)}
+		
         for c in constraints:
-            if ((wizard_ordering.index(c[1]) < wizard_ordering.index(c[0])
-                and  wizard_ordering.index(c[1]) < wizard_ordering.index(c[2]))
-                or  (wizard_ordering.index(c[1]) > wizard_ordering.index(c[0])
-                and  wizard_ordering.index(c[1]) > wizard_ordering.index(c[2]))):
-                return False
+            if ((d[c[1]] < d[c[0]]
+                and  d[c[1]] < d[c[2]])
+                or  (d[c[1]] > d[c[0]]
+                and  d[c[1]] > d[c[2]])):
+            	return False
         return True
+
