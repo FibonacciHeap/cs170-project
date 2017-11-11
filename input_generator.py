@@ -1,7 +1,10 @@
 import time
+import logging
 from datetime import datetime
 import matplotlib.pyplot as plt
 import numpy as np
+
+logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 
 class DifficultInputGenerator:
     """
@@ -25,7 +28,7 @@ class DifficultInputGenerator:
         self.generate_constraint = generate_constraint
         self.solve_problem = solve_problem
 
-    def find_best_constraint_to_magicians_ratio(self, n, reps = 1000):
+    def find_best_constraint_to_magicians_ratio(self, n, start_k = 1, reps = 1000):
         """
         This routine will find the number of constraints k that makes a problem
         of size n take the most time while having the least number of possible
@@ -49,11 +52,14 @@ class DifficultInputGenerator:
                    magicians n
         """
         # 1. Perform experiments
+        logging.debug("Experiment: n = {0}, k = {1}".format(n, start_k))
         avg_first_tictoc_list, avg_solution_count_list = [], []
-        k_list = list(range(1, self.MAX_NUM_CONSTRAINTS))
+        k_list = list(range(start_k, self.MAX_NUM_CONSTRAINTS))
         for k in k_list:
+            logging.debug("Trying k = {0}".format(k))
             avg_first_tictoc, avg_solution_count = 0, 0
             for _ in range(reps):
+                print("Iteration {0}/{1}".format(_ + 1, reps), end='\r')
                 constraints = self.generate_constraint(k)
                 if constraints is None:
                     # We should only reach here if k is a number such that no
