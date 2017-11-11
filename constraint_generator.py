@@ -151,6 +151,8 @@ class ConstraintGenerator(object):
                 _constraint = [int(i) for i in constraint]
                 if (_constraint[0] < _constraint[2] < _constraint[1]) or (_constraint[1] < _constraint[2] < _constraint[0]):
                     valid = False
+                elif _constraint[0] == _constraint[2] or _constraint[0] == _constraint[1] or _constraint[1] == _constraint[2]:
+                    valid = False
             if valid:
                 break
 
