@@ -34,12 +34,19 @@ class MagicianAgeOrderingSolver(object):
 		and given the constraints that we have generated, will test the ordering for validity.  
 		"""
 		solution_count = 0
+		solution_found = false
+
+		#t2 is initially set to t1, if no asnwer is found, the time will be zero.
 		t1 = time.time()
+		t2 = t1 
+
 		for wizard_ordering in self.wizards_permutations:
 			if check_constraints(wizard_ordering, constraints):
 				solution_count +=1
+				if (not solution_found):
+					solution_found = true
+					t2 = time.time()									
 
-		t2 = time.time()
 		return t2 - t1, solution_count
 							
 	def generate_permutations(self):
