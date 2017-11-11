@@ -4,8 +4,8 @@ from constraint_generator import ConstraintGenerator
 
 class TestConstraintGenerator(unittest.TestCase):
     def setUp(self):
-        self.num_wizards = 10
-        self.num_constraints = 30
+        self.num_wizards = 6
+        self.num_constraints = 50
         self.random_cg = ConstraintGenerator(
             self.num_wizards, ConstraintGenerator.RANDOM
         )
@@ -43,8 +43,11 @@ class TestConstraintGenerator(unittest.TestCase):
         for wizard in solution:
             for constraint in constraints:
                 if constraints[2] == wizard:
-                    self.assertFalse(constraint[0] < wizard < constraint[1])
-                    self.assertFalse(constraint[1] < wizard < constraint[0])
+                    left = solution.index(constraint[0])
+                    right = solution.index(constraint[1])
+                    target = solution.index(wizard)
+                    self.assertFalse(left < wizard < right)
+                    self.assertFalse(right < wizard < left)
 
     def test_ssn_cg(self):
         constraints = self.ssn_cg.generate(self.num_constraints)
@@ -63,8 +66,11 @@ class TestConstraintGenerator(unittest.TestCase):
         for wizard in solution:
             for constraint in constraints:
                 if constraints[2] == wizard:
-                    self.assertFalse(constraint[0] < wizard < constraint[1])
-                    self.assertFalse(constraint[1] < wizard < constraint[0])
+                    left = solution.index(constraint[0])
+                    right = solution.index(constraint[1])
+                    target = solution.index(wizard)
+                    self.assertFalse(left < wizard < right)
+                    self.assertFalse(right < wizard < left)
 
     def test_balanced_cg(self):
         pass
@@ -83,8 +89,11 @@ class TestConstraintGenerator(unittest.TestCase):
         for wizard in solution:
             for constraint in constraints:
                 if constraints[2] == wizard:
-                    self.assertFalse(constraint[0] < wizard < constraint[1])
-                    self.assertFalse(constraint[1] < wizard < constraint[0])
+                    left = solution.index(constraint[0])
+                    right = solution.index(constraint[1])
+                    target = solution.index(wizard)
+                    self.assertFalse(left < wizard < right)
+                    self.assertFalse(right < wizard < left)
 
 
 if __name__ == '__main__':
