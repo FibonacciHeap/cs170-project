@@ -1,5 +1,6 @@
 import time
 from datetime import datetime
+from random import shuffle
 import itertools
 
 class MagicianAgeOrderingSolver(object):
@@ -27,6 +28,7 @@ class MagicianAgeOrderingSolver(object):
         self.gen_type = generator_type
         self.wizard_list = [str(i) for i in range(self.num_wizards)]
         self.wizard_permutations = self.generate_permutations()
+        shuffle(self.wizard_permutations)
 
     def solve(self, constraints):
         """
