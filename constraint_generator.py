@@ -148,33 +148,8 @@ class ConstraintGenerator(object):
         random constraint generator, except balances choices of the two left
         wizards, as well as the TARGET wizard.
         """
-        # Tracks how many times each wizard has been used as a
-        # right-hand variable in a constraint, in order to enforce
-        # the heuristic that repeated use makes the problem easier.
-        # selected_count_to_wizard_list = {
-        #     i: list() for i in range(1, k // self.num_wizards + 1)
-        # }
-        # selected_count_to_wizard_list[0] = [
-        #     self.wizards[i] for i in range(self.num_wizards)
-        # ]
-        # current_level = 0
-        # constraints = []
-        # for i in range(k):
-        #     # Pick a target wizard for our constraint. Selection should be
-        #     # uniformly random from the lowest possible selection level.
-        #     selection_level_target_index = random.randint(
-        #         0,
-        #         len(selected_count_to_wizard_list[current_level]) - 1,
-        #     )
-        #     target = selected_count_to_wizard_list[current_level][selection_level_target_index]
-        #     target_index = self.wizards.index(target)
-        #     selected_count_to_wizard_list[current_level].pop(
-        #         selection_level_target_index
-        #     )
-        #     selected_count_to_wizard_list[current_level + 1].append(target)
-        #     if not selected_count_to_wizard_list[current_level]:
-        #         current_level += 1
-        #
+        # for j in range(k):
+        #     i = j % self.num_wizards
         #     # Pick two other wizards for the constraint. Should be a random
         #     # choice for the lowest available selection level
         #     selection_range = [0, self.num_wizards - 1]
@@ -200,4 +175,23 @@ class ConstraintGenerator(object):
         choices move inward, until a single constaint exists for each choice of
         TARGET.
         """
-        pass
+        constraints = []
+        end = self.num_wizards
+        for j in range(k):
+            i = j % self.num_wizards
+            end = end % self.num_wizards
+            selector = [1,2]
+            random.shuffle(selector)
+            if self.num_wizards % 2 == 0 and i == self.num_wizards // 2 - 1:
+                selector[0] -= 1
+                selector[1] -= 1
+            elif self.num_wizards % 2 == 1 and i == self.num_wizards // 2:
+                selector[0] += 1
+                selector[1] += 1
+            constraints.append([
+                self.wizards[end - selector[0]],
+                self.wizards[end - selector[1]],
+                self.wizards[i],
+            ])
+            end -= 1
+        return constraints

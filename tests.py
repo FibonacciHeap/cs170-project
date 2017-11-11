@@ -38,6 +38,14 @@ class TestConstraintGenerator(unittest.TestCase):
             self.assertNotIn(constraint[2], wizards_picked)
             wizards_picked.add(constraint[2])
 
+        # test that known solution satisfies all constraints
+        for i in range(self.num_wizards):
+            wizard = str(i)
+            for constraint in constraints:
+                if constraints[2] == wizard:
+                    self.assertFalse(constraint[0] < wizard < constraint[1])
+                    self.assertFalse(constraint[1] < wizard < constraint[0])
+
     def test_ssn_cg(self):
         constraints = self.ssn_cg.generate(self.num_constraints)
 
@@ -50,11 +58,33 @@ class TestConstraintGenerator(unittest.TestCase):
             self.assertTrue(abs(_constraint[2] - _constraint[0]) <= 2)
             self.assertTrue(abs(_constraint[1] - _constraint[0]) <= 2)
 
+        # test that known solution satisfies all constraints
+        for i in range(self.num_wizards):
+            wizard = str(i)
+            for constraint in constraints:
+                if constraints[2] == wizard:
+                    self.assertFalse(constraint[0] < wizard < constraint[1])
+                    self.assertFalse(constraint[1] < wizard < constraint[0])
+
     def test_balanced_cg(self):
         pass
 
     def test_inward_merge_cg(self):
-        pass
+        constraints = self.inward_merge_cg.generate(self.num_constraints)
+
+        for constraint in constraints:
+            _constraint = [int(i) for i in constraint]
+            # test generated constraints are valid
+            self.assertFalse(_constraint[0] < _constraint[2] < _constraint[1])
+            self.assertFalse(_constraint[1] < _constraint[2] < _constraint[0])
+
+        # test that known solution satisfies all constraints
+        for i in range(self.num_wizards):
+            wizard = str(i)
+            for constraint in constraints:
+                if constraints[2] == wizard:
+                    self.assertFalse(constraint[0] < wizard < constraint[1])
+                    self.assertFalse(constraint[1] < wizard < constraint[0])
 
 
 if __name__ == '__main__':
