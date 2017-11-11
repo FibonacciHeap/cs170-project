@@ -65,6 +65,11 @@ class ConstraintGenerator(object):
         # Tracks how many times each wizard has been used as a
         # right-hand variable in a constraint, in order to enforce
         # the heuristic that repeated use makes the problem easier.
+        if k < n // 3:
+            # We can't generate k constraints that mention all magicians
+            print("We reached an invalid value for k given n.")
+            return []
+
         selected_count_to_wizard_list = {
             i: list() for i in range(1, max((k // self.num_wizards), self.num_wizards) + 2)
         }

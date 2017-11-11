@@ -52,6 +52,9 @@ class DifficultInputGenerator:
             ratio: the best number of constraint k divided by the number of
                    magicians n
         """
+        # 0. Pre-process parameters
+        start_k = max(n // 3, start_k)
+
         # 1. Perform experiments
         logging.debug("Experiment: n = {0}, starting k = {1}".format(n, start_k))
         avg_first_tictoc_list, avg_solution_count_list = [], []
