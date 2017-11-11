@@ -6,7 +6,7 @@ N = 5
 constraint_constructor = ConstraintGenerator(N, ConstraintGenerator.RANDOM)
 problem_solver = MagicianAgeOrderingSolver(N, MagicianAgeOrderingSolver.RANDOM)
 input_generator = DifficultInputGenerator(constraint_constructor.generate, \
-                                          problem_solver.solve)
+                                          problem_solver.solve, 50)
 
 ratio = input_generator.find_best_constraint_to_magicians_ratio(N)
 print("The best k to n ratio is: {0}".format(ratio))
