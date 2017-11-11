@@ -64,10 +64,12 @@ class DifficultInputGenerator:
             for _ in range(reps):
                 print("Iteration {0}/{1}".format(_ + 1, reps), end='\r')
                 constraints = self.generate_constraint(k)
-                if constraints is None:
+                if not constraints:
                     # We should only reach here if k is a number such that no
                     # valid input problem of size n and k constraints can be
                     # generated.
+                    logging.warning("There are no valid constraints for k = {0}"\
+                        .format(k))
                     break
                 first_tictoc, solution_count = self.solve_problem(constraints)
                 avg_first_tictoc += first_tictoc
