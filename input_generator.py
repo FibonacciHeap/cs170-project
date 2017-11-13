@@ -140,6 +140,11 @@ class DifficultInputGenerator:
         best_k_2 = np.argmax(scaled_avg_first_tictoc_list) + 1
         print("Best k based on 'scaled time' figure: {0} ({1})" \
             .format(best_k_2, max(scaled_avg_first_tictoc_list)))
+        best_k_next_10 = scaled_avg_first_tictoc_list[best_k_1-1:best_k_1+10]
+        print("Solution count for the next 10 best k based on 'scaled time': {0}" \
+            .format(best_k_next_10))
+        print("Ratio for the min among these next 10 best k: {0}" \
+            .format((np.argmin(best_k_next_10) + best_k_1) / n))
 
         avg_best_k = best_k_1 + best_k_2 // 2 # not necessarily true, but...
         final_ratio = avg_best_k / n
