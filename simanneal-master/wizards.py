@@ -10,6 +10,7 @@ class NonBetweenness(Annealer):
         self.num_wizards = num_wizards
         self.num_constraints = num_constraints
         self.constraints = constraints
+        wizards = random.shuffle(wizards)
         # NOTE: state == wizards
         super(NonBetweenness, self).__init__(wizards)
 
