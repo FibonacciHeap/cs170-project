@@ -5,6 +5,7 @@ from simanneal import Annealer
 
 class NonBetweenness(Annealer):
     def __init__(self, num_wizards, num_constraints, wizards, constraints):
+        super(NonBetweenness, self).__init__(wizards)
         # mapping for efficient position lookup by wizard name
         self.wiz_to_pos = {wizards[i] : i for i in range(len(wizards))}
         self.num_wizards = num_wizards
@@ -12,7 +13,6 @@ class NonBetweenness(Annealer):
         self.constraints = constraints
         wizards = random.shuffle(wizards)
         # NOTE: state == wizards
-        super(NonBetweenness, self).__init__(wizards)
 
     def move(self):
         """Swaps two wizard assignments."""
