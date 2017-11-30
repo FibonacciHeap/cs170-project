@@ -1,4 +1,5 @@
 import argparse
+from itertools import groupby
 
 from wizards import NonBetweenness
 
@@ -26,7 +27,7 @@ def solve(num_wizards, num_constraints, wizards, constraints):
         constraint[0], constraint[1] = min(constraint[0], constraint[1]), \
             max(constraint[0], constraint[1])
     # remove duplicates
-    constraints = list(set(constraints))
+    constraints = [k for k,v in groupby(sorted(constraints))]
     solver = NonBetweenness(num_wizards, num_constraints, wizards, constraints)
     wizard_assignment_array = solver.anneal()
     return wizard_assignment_array
