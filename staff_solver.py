@@ -1,19 +1,6 @@
 import argparse
 
-from simanneal import Annealer
-
-class NonBetweenness(Annealer):
-    def move(self):
-        """Swaps two cities in the route."""
-        a = random.randint(0, len(self.state) - 1)
-        b = random.randint(0, len(self.state) - 1)
-        self.state[a], self.state[b] = self.state[b], self.state[a]
-
-    def energy(self):
-        """Calculates the length of the route."""
-        e = 0
-        # TODO: implement
-        return e
+from wizards import NonBetweenness
 
 """
 ======================================================================
@@ -34,8 +21,7 @@ def solve(num_wizards, num_constraints, wizards, constraints):
     Output:
         An array of wizard names in the ordering your algorithm returns
     """
-    initial_state = [] # TODO: fill in
-    solver = NonBetweenness(initial_state)
+    solver = NonBetweenness(num_wizards, num_constraints, wizards, constraints)
     wizard_assignment_array = solver.anneal()
     return wizard_assignment_array
 
