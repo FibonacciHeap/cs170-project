@@ -23,8 +23,8 @@ def solve(num_wizards, num_constraints, wizards, constraints):
     """
     for constraint in constraints:
         # sort the first two elements in the list
-        constraint[0] = min(constraint[0], constraint[1])
-        constraint[1] = max(constraint[0], constraint[1])
+        constraint[0], constraint[1] = min(constraint[0], constraint[1]), \
+            max(constraint[0], constraint[1])
     # remove duplicates
     constraints = list(set(constraints))
     solver = NonBetweenness(num_wizards, num_constraints, wizards, constraints)
