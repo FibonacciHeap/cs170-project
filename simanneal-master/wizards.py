@@ -7,6 +7,8 @@ from simanneal import Annealer
 
 class NonBetweenness(Annealer):
     def __init__(self, num_wizards, num_constraints, wizards, constraints):
+        # mapping for efficient position lookup by wizard name
+        self.wiz_to_pos = {wizards[i] : i for i in range(len(wizards))}
         self.num_wizards = num_wizards
         self.num_constraints = num_constraints
         self.constraints = constraints
@@ -17,13 +19,17 @@ class NonBetweenness(Annealer):
         """Swaps two wizard assignments."""
         a = random.randint(0, len(self.state) - 1)
         b = random.randint(0, len(self.state) - 1)
+        self.wiz_to_pos[a], self.wiz_to_pos[b] = self.wiz_to_pos[b], self.wiz_to_pos[a]
         self.state[a], self.state[b] = self.state[b], self.state[a]
 
     def energy(self):
         """Calculates the number of constraints satisfied."""
         e = 0
-        # for i in range(len(self.state)):
-        #     e += self.distance_matrix[self.state[i-1]][self.state[i]]
+        for wizard in self.state:
+            for c in self.constraints:
+                a, b, c = self.wiz_to_pos[c[0]], self.wiz_to_pos[c[1]]. self.wiz_to_pos[c[2]]
+                if wizard == c[2] and (a < c < b or b < c < a):
+                    e += 1
         return e
 
 
