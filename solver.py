@@ -1,74 +1,62 @@
-import time
-from datetime import datetime
-from random import shuffle
-import itertools
+import argparse
 
-class MagicianAgeOrderingSolver(object):
+from wizards import NonBetweenness
 
+"""
+======================================================================
+  Complete the following function.
+======================================================================
+"""
+
+def solve(num_wizards, num_constraints, wizards, constraints):
     """
-    Magician Age Ordering Solver Class
+    Write your algorithm here.
+    Input:
+        num_wizards: Number of wizards
+        num_constraints: Number of constraints
+        wizards: An array of wizard names, in no particular order
+        constraints: A 2D-array of constraints,
+                     where constraints[0] may take the form ['A', 'B', 'C']i
 
-    Methods to take the constraints generated from our
-    constaints generator and checks all possible orderings
-    of our n magicians against the generated constaints.
-
-    The number of possible solutions (orderings) is returned
-    in addition to the time taken to find the number of solutions.
+    Output:
+        An array of wizard names in the ordering your algorithm returns
     """
+    solver = NonBetweenness(num_wizards, num_constraints, wizards, constraints)
+    wizard_assignment_array = solver.anneal()[0]
+    return wizard_assignment_array
 
-    """Enum constants for generator type"""
-    RANDOM = 0
-    SINGLE_SIDE_NEIGHBOR = 1
-    BALANCED = 2
-    INWARD_MERGE = 3
+"""
+======================================================================
+   No need to change any code below this line
+======================================================================
+"""
 
+def read_input(filename):
+    with open(filename) as f:
+        num_wizards = int(f.readline())
+        num_constraints = int(f.readline())
+        constraints = []
+        wizards = set()
+        for _ in range(num_constraints):
+            c = f.readline().split()
+            constraints.append(c)
+            for w in c:
+                wizards.add(w)
 
-    def __init__(self, n, generator_type=0):
-        self.num_wizards = n
-        self.gen_type = generator_type
-        self.wizard_list = [str(i) for i in range(self.num_wizards)]
-        self.wizard_permutations = self.generate_permutations()
-        shuffle(self.wizard_permutations)
+    wizards = list(wizards)
+    return num_wizards, num_constraints, wizards, constraints
 
-    def solve(self, constraints):
-        """
-        This function will iterate through all possible ordering of our wizard list,
-        and given the constraints that we have generated, will test the ordering for validity.
-        """
-        solution_count = 0
-        solution_found = False
+def write_output(filename, solution):
+    with open(filename, "w") as f:
+        for wizard in solution:
+            f.write("{0} ".format(wizard))
 
-        #t2 is initially set to t1, if no asnwer is found, the time will be zero.
-        t1 = time.time()
-        t2 = t1
+if __name__=="__main__":
+    parser = argparse.ArgumentParser(description = "Constraint Solver.")
+    parser.add_argument("input_file", type=str, help = "___.in")
+    parser.add_argument("output_file", type=str, help = "___.out")
+    args = parser.parse_args()
 
-        for wizard_ordering in self.wizard_permutations:
-            if self.check_constraints(wizard_ordering, constraints):
-                solution_count +=1
-                if (not solution_found):
-                    solution_found = True
-                    t2 = time.time()
-        return t2 - t1, solution_count
-
-    def generate_permutations(self):
-        """
-        Returning all possible permutations of the original list of wizards that we have.
-        """
-        return list(itertools.permutations(self.wizard_list))
-
-
-    def check_constraints(self, wizard_ordering, constraints):
-        """
-        This function checks a given ordering against our generated constraints
-        and that the wizards fall in locations valid for this. c is the constraint tuple.
-        """
-
-        d = {k: v for v, k in enumerate(wizard_ordering)}
-
-        for c in constraints:
-            if not ((d[c[2]] < d[c[1]]
-                and  d[c[2]] < d[c[0]])
-                or  (d[c[2]] > d[c[1]]
-                and  d[c[2]] > d[c[0]])):
-            	return False
-        return True
+    num_wizards, num_constraints, wizards, constraints = read_input(args.input_file)
+    solution = solve(num_wizards, num_constraints, wizards, constraints)
+    write_output(args.output_file, solution)
