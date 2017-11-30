@@ -65,96 +65,52 @@ class ConstraintGenerator(object):
         # Tracks how many times each wizard has been used as a
         # right-hand variable in a constraint, in order to enforce
         # the heuristic that repeated use makes the problem easier.
-        while True:
-            if k < self.num_wizards // 3:
-                # We can't generate k constraints that mention all magicians
-                print("We reached an invalid value for k given n.")
-                return []
+        if k < self.num_wizards // 3:
+            # We can't generate k constraints that mention all magicians
+            print("We reached an invalid value for k given n.")
+            return []
 
-            not_yet_selected = list(self.wizards)
-            selected_count_to_wizard_list = {
-                i: list() for i in range(1, max((k // self.num_wizards), self.num_wizards) + 2)
-            }
-            selected_count_to_wizard_list[0] = [
-                self.wizards[i] for i in range(self.num_wizards)
-            ]
-            current_level = 0
-            constraints = []
-            for i in range(k):
-                # Pick a target wizard for our constraint. Selection should be
-                # uniformly random from the lowest possible selection level.
-                if not_yet_selected:
-                    target = random.choice(not_yet_selected)
-                    selected_count_to_wizard_list[current_level].pop(
-                        selected_count_to_wizard_list[current_level].index(target)
-                    )
-                    not_yet_selected.pop(not_yet_selected.index(target))
-                else:
-                    selection_level_target_index = random.randint(
-                        0,
-                        len(selected_count_to_wizard_list[current_level]) - 1,
-                    )
-                    target = selected_count_to_wizard_list[current_level][selection_level_target_index]
-                    selected_count_to_wizard_list[current_level].pop(
-                        selection_level_target_index
-                    )
+        selected_count_to_wizard_list = {
+            i: list() for i in range(1, max((k // self.num_wizards), self.num_wizards) + 2)
+        }
+        selected_count_to_wizard_list[0] = [
+            self.wizards[i] for i in range(self.num_wizards)
+        ]
+        current_level = 0
+        constraints = []
+        for i in range(k):
+            # Pick a target wizard for our constraint. Selection should be
+            # uniformly random from the lowest possible selection level.
+            selection_level_target_index = random.randint(
+                0,
+                len(selected_count_to_wizard_list[current_level]) - 1,
+            )
+            target = selected_count_to_wizard_list[current_level][selection_level_target_index]
+            target_index = self.wizards.index(target)
+            selected_count_to_wizard_list[current_level].pop(
+                selection_level_target_index
+            )
+            selected_count_to_wizard_list[current_level + 1].append(target)
+            if not selected_count_to_wizard_list[current_level]:
+                current_level += 1
 
-                target_index = self.wizards.index(target)
-                selected_count_to_wizard_list[current_level + 1].append(target)
-                if not selected_count_to_wizard_list[current_level]:
-                    current_level += 1
+            # Pick two other wizards for the constraint. Can be a random
+            # selection of any two that satisfy the following criteria:
+            # 1: The two wizards are not the same and are not TARGET
+            # 2: The two wizards are both from the SAME side of TARGET
+            # 3: The two wizards are chosen from the larger free side of TARGET
+            selection_range = [0, self.num_wizards - 1]
+            if target_index < self.num_wizards / 2:
+                selection_range[0] = target_index + 1
+            else:
+                selection_range[1] = target_index - 1
+            first, second = None, None
+            while first == second:
+                first = random.randint(*selection_range)
+                second = random.randint(*selection_range)
+            first, second = self.wizards[first], self.wizards[second]
 
-                # Pick two other wizards for the constraint. Can be a random
-                # selection of any two that satisfy the following criteria:
-                # 1: The two wizards are not the same and are not TARGET
-                # 2: The two wizards are both from the SAME side of TARGET
-                # 3: The two wizards are chosen from the larger free side of TARGET
-                selection_range = [0, self.num_wizards - 1]
-                if target_index < self.num_wizards / 2:
-                    selection_range[0] = target_index + 1
-                else:
-                    selection_range[1] = target_index - 1
-
-                first, second = None, None
-                if not_yet_selected:
-                    left_side_choices = [w for w in not_yet_selected if
-                        self.wizards.index(w) < self.wizards.index(target)]
-                    right_side_choices = [w for w in not_yet_selected if
-                        self.wizards.index(w) > self.wizards.index(target)]
-                    if len(left_side_choices) >= len(right_side_choices) and len(left_side_choices) > 1:
-                        first, second = random.sample(left_side_choices, 2)
-                        not_yet_selected.pop(not_yet_selected.index(first))
-                        not_yet_selected.pop(not_yet_selected.index(second))
-                    elif len(right_side_choices) > len(left_side_choices) and len(right_side_choices) > 1:
-                        first, second = random.sample(right_side_choices, 2)
-                        not_yet_selected.pop(not_yet_selected.index(first))
-                        not_yet_selected.pop(not_yet_selected.index(second))
-                    else:
-                        if left_side_choices:
-                            first = left_side_choices[0]
-                        else:
-                            first = right_side_choices[0]
-                        not_yet_selected.pop(not_yet_selected.index(first))
-                        second = random.randint(*selection_range)
-                else:
-                    while first == second:
-                        first = random.randint(*selection_range)
-                        second = random.randint(*selection_range)
-                        first, second = self.wizards[first], self.wizards[second]
-
-                constraints.append([first, second, target])
-
-            if not_yet_selected:
-                return []
-            valid = True
-            for constraint in constraints:
-                _constraint = [int(i) for i in constraint]
-                if (_constraint[0] < _constraint[2] < _constraint[1]) or (_constraint[1] < _constraint[2] < _constraint[0]):
-                    valid = False
-                elif _constraint[0] == _constraint[2] or _constraint[0] == _constraint[1] or _constraint[1] == _constraint[2]:
-                    valid = False
-            if valid:
-                break
+            constraints.append([first, second, target])
 
         return constraints
 
