@@ -36,9 +36,9 @@ class Annealer(object):
     __metaclass__ = abc.ABCMeta
 
     # defaults
-    Tmax = 25000.0
+    Tmax = 50000.0
     Tmin = 2.5
-    steps = 50000
+    steps = 100000
     updates = 100
     copy_strategy = 'deepcopy'
     user_exit = False
@@ -225,7 +225,7 @@ class Annealer(object):
         return self.best_state, self.best_energy
 
     def auto(self, minutes, steps=2000):
-        """Explores the annealing landscape and 
+        """Explores the annealing landscape and
         estimates optimal temperature settings.
 
         Returns a dictionary suitable for the `set_schedule` method.

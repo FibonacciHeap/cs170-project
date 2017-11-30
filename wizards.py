@@ -2,23 +2,24 @@ from __future__ import print_function
 import math
 import random
 from simanneal import Annealer
+from random import shuffle
 
 class NonBetweenness(Annealer):
     def __init__(self, num_wizards, num_constraints, wizards, constraints):
         # NOTE: state == wizards
+        shuffle(wizards)
         super(NonBetweenness, self).__init__(wizards)
         # mapping for efficient position lookup by wizard name
         self.wiz_to_pos = {wizards[i] : i for i in range(len(wizards))}
         self.num_wizards = num_wizards
         self.num_constraints = num_constraints
         self.constraints = constraints
-        wizards = random.shuffle(wizards)
 
     def move(self):
         """Swaps two wizard assignments."""
         a = random.randint(0, len(self.state) - 1)
         b = random.randint(0, len(self.state) - 1)
-        self.wiz_to_pos[a], self.wiz_to_pos[b] = self.wiz_to_pos[b], self.wiz_to_pos[a]
+        self.wiz_to_pos[self.state[a]], self.wiz_to_pos[self.state[b]] = self.wiz_to_pos[self.state[b]], self.wiz_to_pos[self.state[a]]
         self.state[a], self.state[b] = self.state[b], self.state[a]
 
     def energy(self):
