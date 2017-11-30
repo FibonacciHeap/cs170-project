@@ -13,7 +13,7 @@ def distance(a, b):
                      math.cos(lat1) * math.cos(lat2) * math.cos(lon1 - lon2)) * R
 
 
-class NonBetweenness(Annealer):
+class TravellingSalesmanProblem(Annealer):
 
     """Test annealer with a travelling salesman problem.
     """
@@ -21,11 +21,10 @@ class NonBetweenness(Annealer):
     # pass extra data (the distance matrix) into the constructor
     def __init__(self, state, distance_matrix):
         self.distance_matrix = distance_matrix
-        super(NonBetweenness, self).__init__(state)  # important!
+        super(TravellingSalesmanProblem, self).__init__(state)  # important!
 
     def move(self):
-        """Swaps two wizards"""
-        #consider doing this with adjecent ones
+        """Swaps two cities in the route."""
         a = random.randint(0, len(self.state) - 1)
         b = random.randint(0, len(self.state) - 1)
         self.state[a], self.state[b] = self.state[b], self.state[a]
@@ -79,11 +78,11 @@ if __name__ == '__main__':
             else:
                 distance_matrix[ka][kb] = distance(va, vb)
 
-    wizards = NonBetweenness(init_state, distance_matrix)
-    wizards.steps = 100000
+    tsp = TravellingSalesmanProblem(init_state, distance_matrix)
+    tsp.steps = 100000
     # since our state is just a list, slice is the fastest way to copy
-    wizards.copy_strategy = "slice"
-    state, e = wizards.anneal()
+    tsp.copy_strategy = "slice"
+    state, e = tsp.anneal()
 
     while state[0] != 'New York City':
         state = state[1:] + state[:1]  # rotate NYC to start
