@@ -3,8 +3,6 @@ import math
 import random
 from simanneal import Annealer
 
-from simanneal import Annealer
-
 class NonBetweenness(Annealer):
     def __init__(self, num_wizards, num_constraints, wizards, constraints):
         self.num_wizards = num_wizards
@@ -20,7 +18,7 @@ class NonBetweenness(Annealer):
         self.state[a], self.state[b] = self.state[b], self.state[a]
 
     def energy(self):
-        """Calculates the number of constraints satisfied."""
+        """Calculates the number of constraints unsatisfied."""
         e = 0
         # for i in range(len(self.state)):
         #     e += self.distance_matrix[self.state[i-1]][self.state[i]]
