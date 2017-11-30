@@ -25,8 +25,8 @@ class NonBetweenness(Annealer):
         e = 0
         for wizard in self.state:
             for c in self.constraints:
-                a, b, c = self.wiz_to_pos[c[0]], self.wiz_to_pos[c[1]]. self.wiz_to_pos[c[2]]
-                if wizard == c[2] and (a < c < b or b < c < a):
+                x, y, z = self.wiz_to_pos[c[0]], self.wiz_to_pos[c[1]]. self.wiz_to_pos[c[2]]
+                if wizard == c[2] and (x < z < y or y < z < x):
                     e += 1
         return e
 
