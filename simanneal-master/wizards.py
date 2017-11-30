@@ -13,7 +13,7 @@ def distance(a, b):
                      math.cos(lat1) * math.cos(lat2) * math.cos(lon1 - lon2)) * R
 
 
-class TravellingSalesmanProblem(Annealer):
+class WizardOrderingProblem(Annealer):
 
     """Test annealer with a travelling salesman problem.
     """
@@ -24,7 +24,8 @@ class TravellingSalesmanProblem(Annealer):
         super(TravellingSalesmanProblem, self).__init__(state)  # important!
 
     def move(self):
-        """Swaps two cities in the route."""
+        """Swaps two wizards"""
+        #consider doing this with adjecent ones
         a = random.randint(0, len(self.state) - 1)
         b = random.randint(0, len(self.state) - 1)
         self.state[a], self.state[b] = self.state[b], self.state[a]
