@@ -1,1 +1,0 @@
-['Isaiah', 'Stella', 'Lucas', 'Jamie', 'Jett', 'Bailey', 'Kristi', 'Patti', 'Zoey', 'Jacob', 'Zelida', 'Alanna', 'Annika', 'Angelina', 'Hope', 'Lee', 'Rose', 'Desiree', 'Isaac', 'Rochelle', 'Erika', 'Leslie', 'Gwen', 'Kellie', 'Callie', 'Parker', 'Phyllis', 'Anthony', 'Tod', 'Ellen', 'Makenna', 'Kim', 'Marlene', 'Layla', 'Dana'] 6 

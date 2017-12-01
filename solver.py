@@ -27,6 +27,7 @@ def solve(num_wizards, num_constraints, wizards, constraints, identifier):
 
 
     print("Num constraints before removing duplicates: ", len(constraints))
+
     for constraint in constraints:
         # sort the first two elements in the list
         constraint[0], constraint[1] = min(constraint[0], constraint[1]), \
