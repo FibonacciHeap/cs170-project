@@ -1,1 +1,0 @@
-['Vihan', 'Kylee', 'Brooklyn', 'Kim', 'Kirsten', 'Kay', 'Caitlyn', 'Guillermo', 'Cora', 'Jocelyn', 'Johnny', 'Cindy', 'Carlos', 'Sidney', 'Alexis', 'Bert', 'Cristian', 'Krista', 'Javier', 'Janet'] 17 

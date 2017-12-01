@@ -1,1 +1,0 @@
-['Brooklyn', 'Vihan', 'Kylee', 'Kirsten', 'Kay', 'Caitlyn', 'Kim', 'Johnny', 'Cora', 'Jocelyn', 'Guillermo', 'Cindy', 'Carlos', 'Cristian', 'Alexis', 'Bert', 'Sidney', 'Krista', 'Janet', 'Javier'] 10 

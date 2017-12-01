@@ -22,6 +22,8 @@ def getopts(argv):
 def run_commands(num, file_name):
     output = []
     for i in range(int(num)):
+        command = 'nohup python solver.py phase2_inputs/inputs' + file_name[:2] + '/input' + file_name + '.in outputs/test_out' + file_name + '_' + str(i) + '.txt &'
+        print('Calling: ' + command)
         output.append(os.system('nohup python solver.py phase2_inputs/inputs' + file_name[:2] + '/input' + file_name + '.in outputs/test_out' + file_name + '_' + str(i) + '.txt &'))
     print(output)
 

@@ -23,7 +23,7 @@ class NonBetweenness(Annealer):
         self.Tmin = 0.5
         self.steps = 20000
         self.updates = 1000
-        #randomize_hyperparams()
+        self.randomize_hyperparams()
 
         # mapping for efficient position lookup by wizard name
         self.wiz_to_pos = {wizards[i] : i for i in range(len(wizards))}
