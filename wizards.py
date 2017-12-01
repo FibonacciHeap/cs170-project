@@ -6,7 +6,7 @@ from random import (
 )
 
 import sys
-sys.path.append('$HOME/cs170-project/simanneal-master/simanneal')
+sys.path.insert('$HOME/cs170-project/simanneal-master/simanneal')
 from simanneal import Annealer
 
 class NonBetweenness(Annealer):
