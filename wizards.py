@@ -20,8 +20,8 @@ class NonBetweenness(Annealer):
         super(NonBetweenness, self).__init__(wizards)
         # set hyperparameters
         self.Tmax = 1000000.0
-        self.Tmin = 0.8
-        self.steps = 50000
+        self.Tmin = 0.5
+        self.steps = 500000
         self.updates = 1000
         # mapping for efficient position lookup by wizard name
         self.wiz_to_pos = {wizards[i] : i for i in range(len(wizards))}
