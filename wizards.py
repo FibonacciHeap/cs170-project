@@ -16,6 +16,11 @@ class NonBetweenness(Annealer):
         # NOTE: state == wizards
         shuffle(wizards)
         super(NonBetweenness, self).__init__(wizards)
+        # set hyperparameters
+        self.Tmax = 50000.0
+        self.Tmin = 2.5
+        self.steps = 100000
+        self.updates = 100
         # mapping for efficient position lookup by wizard name
         self.wiz_to_pos = {wizards[i] : i for i in range(len(wizards))}
         self.num_wizards = num_wizards
