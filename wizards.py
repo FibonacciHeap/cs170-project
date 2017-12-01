@@ -14,25 +14,31 @@ sys.path.insert(0, dir_path + '/simanneal-master/simanneal')
 from anneal import Annealer
 
 class NonBetweenness(Annealer):
-    def __init__(self, num_wizards, num_constraints, wizards, constraints):
+    def __init__(self, identifier, num_wizards, num_constraints, wizards, constraints):
         # NOTE: state == wizards
-        shuffle(wizards)
+        #shuffle(wizards) # do not shuffle because we may start with an ordering
         super(NonBetweenness, self).__init__(wizards)
         # set hyperparameters
-        self.Tmax = 1
-        self.Tmin = 0.01
-        self.steps = 300000
-        self.updates = 5000
+        self.Tmax = 0.34
+        self.Tmin = 0.008
+        self.steps = 180000
+        self.updates = 1500
         # mapping for efficient position lookup by wizard name
+        self.identifier = identifier
         self.wiz_to_pos = {wizards[i] : i for i in range(len(wizards))}
         self.num_wizards = num_wizards
         self.num_constraints = num_constraints
         self.constraints = constraints
-
+        self.wizards = wizards
 
     def energy(self):
         """Calculates the number of constraints unsatisfied."""
-        return sum([1 for c in self.constraints if self._is_constraint_violated(c)])
+        E = sum([1 for c in self.constraints if self._is_constraint_violated(c)])
+        if E == 0:
+            self._save_solution()
+            print("exiting...")
+            exit()
+        return E
 
     def move(self):
         """Performs a move during the simmulated annealing algorithm."""
@@ -41,10 +47,20 @@ class NonBetweenness(Annealer):
         #self._move_adjacently()
         self._move_range_shuffle(3)
 
-    def find_violated_constraints(self):
+    def print_violated_constraints(self):
         for c in self.constraints:
             if self._is_constraint_violated(c):
                 print(c)
+
+    def _save_solution(self):
+        print("FOUND OPTIMAL:", self.state)
+        filepath = 'solutions/inputs' + str(self.num_wizards) + '/'
+        filename = 'input_' + str(self.num_wizards) + "_" + \
+            str(self.identifier) + ".out"
+        print("saving to file...", filename)
+        with open(filepath + filename , 'w') as file:
+            for w in self.state:
+                file.write(w + '\n')
 
     def _move_adjacently(self):
         a = randint(0, len(self.state) - 1)
@@ -59,17 +75,15 @@ class NonBetweenness(Annealer):
 
     def _move_range_shuffle(self, range_len):
         """Shuffles a random, continuous subset of the current state, provided the length of the range desired to be shuffled"""
-        #start1 = randint(range_len, len(self.state) - range_len)
         start = randint(0, len(self.state) - range_len)
-        #range_list = choice([[start1, start1 - range_len], [start2, start2 + range_len]])
         end = start + range_len
 
         copy_state = self.state[start:end]
         random.shuffle(copy_state)
-        self.state[start:end] = copy_state
 
-        for wizard in self.state[start:end]:
-            self.wiz_to_pos[wizard] = self.state.index(wizard)
+        for i, wizard in enumerate(copy_state):
+            self.state[i + start] = wizard
+            self.wiz_to_pos[wizard] = i + start
 
     def _move_satisfy_random_constraint(self):
         """Satisfies a random unsatisfied constraint."""
@@ -84,6 +98,7 @@ class NonBetweenness(Annealer):
                 # with probability 0.5, swap the two border wizards
                 if random.randint(0, 1) == 1:
                     self._swap_wizards(c[0], c[1])
+        if not done: print("Nothing to do...")
 
     def _move_randomly(self):
         """Swaps two wizard assignments."""

@@ -9,7 +9,7 @@ from wizards import NonBetweenness
 ======================================================================
 """
 
-def solve(num_wizards, num_constraints, wizards, constraints):
+def solve(num_wizards, num_constraints, wizards, constraints, identifier):
     """
     Write your algorithm here.
     Input:
@@ -22,6 +22,10 @@ def solve(num_wizards, num_constraints, wizards, constraints):
     Output:
         An array of wizard names in the ordering your algorithm returns
     """
+    # To start with some ordering, specify it on the following line and uncomment.
+    # wizards = []
+
+
     print("Num constraints before removing duplicates: ", len(constraints))
     for constraint in constraints:
         # sort the first two elements in the list
@@ -30,13 +34,16 @@ def solve(num_wizards, num_constraints, wizards, constraints):
     # remove duplicates
     constraints = [k for k,v in groupby(sorted(constraints))]
     print("Num constraints before after duplicates: ", len(constraints))
-    solver = NonBetweenness(num_wizards, num_constraints, wizards, constraints)
-    print("Initial energy is " + str(solver.energy()))
-    #solver.find_violated_constraints()
-    #exit()
-    wizard_assignment_array = solver.anneal()
-    print("\nBest energy for this iteration is: " + str(solver.best_energy))
-    print("Best state for this iteration is:", solver.best_state)
+    best_energy = 100 # arbitrary number > 0
+    while best_energy != 0:
+        solver = NonBetweenness(identifier, num_wizards, num_constraints, wizards, constraints)
+        print("Initial energy is " + str(solver.energy()))
+        solver.print_violated_constraints()
+        wizard_assignment_array = solver.anneal()
+        best_state, best_energy = wizard_assignment_array
+        print("\nBest energy for this iteration is: " + str(best_energy))
+        print("Best state for this iteration is:", best_state)
+        wizards = best_state
     return wizard_assignment_array
 
 """
@@ -58,7 +65,8 @@ def read_input(filename):
                 wizards.add(w)
 
     wizards = list(wizards)
-    return num_wizards, num_constraints, wizards, constraints
+    identifier = filename.split('.')[0][-1]
+    return num_wizards, num_constraints, wizards, constraints, identifier
 
 def write_output(filename, solution):
     with open(filename, "w") as f:
@@ -71,6 +79,6 @@ if __name__=="__main__":
     parser.add_argument("output_file", type=str, help = "___.out")
     args = parser.parse_args()
 
-    num_wizards, num_constraints, wizards, constraints = read_input(args.input_file)
-    solution = solve(num_wizards, num_constraints, wizards, constraints)
+    num_wizards, num_constraints, wizards, constraints, identifier = read_input(args.input_file)
+    solution = solve(num_wizards, num_constraints, wizards, constraints, identifier)
     write_output(args.output_file, solution)
