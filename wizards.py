@@ -22,7 +22,7 @@ class NonBetweenness(Annealer):
         self.Tmax = 3.0
         self.Tmin = 0.5
         self.steps = 20000
-        self.updates = 1000
+        self.updates = 10000
         self.randomize_hyperparams()
 
         # mapping for efficient position lookup by wizard name
@@ -41,7 +41,7 @@ class NonBetweenness(Annealer):
         """Calculates the number of constraints unsatisfied."""
         return sum([1 for c in self.constraints if self._is_constraint_violated(c)])
 
-    def move(self, curr_energy):
+    def move(self):
         """Performs a move during the simmulated annealing algorithm."""
 
         self._move_range_shuffle(3)
@@ -62,6 +62,15 @@ class NonBetweenness(Annealer):
             b = a + offset
         self._swap_wizards(self.state[a], self.state[b])
 
+    def dict_check(self):
+        enum_dict = {v:i for i, v in enumerate(self.state)}
+        error = 0
+        for wizard in self.state:
+            if (enum_dict[wizard] != self.wiz_to_pos[wizard]):
+                error+=1
+                print(wizard)
+        return error
+
     def _move_range_shuffle(self, range_len):
         """Shuffles a random, continuous subset of the current state, provided the length of the range desired to be shuffled"""
         #start1 = randint(range_len, len(self.state) - range_len)
@@ -69,12 +78,31 @@ class NonBetweenness(Annealer):
         #range_list = choice([[start1, start1 - range_len], [start2, start2 + range_len]])
         end = start + range_len
 
+        # print("start: " + str(start))
+        # print("end: " + str(end))
+        # print("range_len: " + str(range_len))
+        # print("prior state: ", self.state)
+        # print("prior dict: ", self.wiz_to_pos)
+
         copy_state = self.state[start:end]
+
+        #for wizard in copy_state:
+        #    print(wizard)
+
         random.shuffle(copy_state)
         self.state[start:end] = copy_state
 
-        for wizard in self.state[start:end]:
-            self.wiz_to_pos[wizard] = self.state.index(wizard)
+        for i, wizard in enumerate(copy_state):
+            #print("wiz1_loop: " + wizard)
+            self.state[start + i] = wizard
+            self.wiz_to_pos[wizard] = start + i
+
+        # print("post state: ", self.state)
+        # print("post dict: ", self.wiz_to_pos)
+        # print('\n Error:', self.dict_check())
+        # print("end\n \n")
+
+
 
     def _move_range_mirror(self, range_len):
         """Shuffles a random, continuous subset of the current state, provided the length of the range desired to be shuffled"""

@@ -25,7 +25,7 @@ def run_commands(num, file_name):
         command = 'nohup python solver.py phase2_inputs/inputs' + file_name[:2] + '/input' + file_name + '.in outputs/test_out' + file_name + '_' + str(i) + '.txt &'
         print('Calling: ' + command)
         output.append(os.system('nohup python solver.py phase2_inputs/inputs' + file_name[:2] + '/input' + file_name + '.in outputs/test_out' + file_name + '_' + str(i) + '.txt &'))
-    print(output)
+    #print(output)
 
 if __name__ == '__main__':
     from sys import argv

@@ -181,6 +181,7 @@ class Annealer(object):
         T = self.Tmax
         E = self.energy()
         prevState = self.copy_state(self.state)
+        prevDict = self.copy_state(self.wiz_to_pos)
         prevEnergy = E
         self.best_state = self.copy_state(self.state)
         self.best_energy = E
@@ -193,13 +194,14 @@ class Annealer(object):
         while step < self.steps and not self.user_exit:
             step += 1
             T = self.Tmax * math.exp(Tfactor * step / self.steps)
-            self.move(E)
+            self.move()
             E = self.energy()
             dE = E - prevEnergy
             trials += 1
             if dE > 0.0 and math.exp(-dE / T) < random.random():
                 # Restore previous state
                 self.state = self.copy_state(prevState)
+                self.wiz_to_pos = self.copy_state(prevDict)
                 E = prevEnergy
             else:
                 # Accept new state and compare to best state
@@ -207,6 +209,7 @@ class Annealer(object):
                 if dE < 0.0:
                     improves += 1
                 prevState = self.copy_state(self.state)
+                prevDict = self.copy_state(self.wiz_to_pos)
                 prevEnergy = E
                 if E < self.best_energy:
                     self.best_state = self.copy_state(self.state)
