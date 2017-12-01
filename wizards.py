@@ -41,10 +41,10 @@ class NonBetweenness(Annealer):
         """Calculates the number of constraints unsatisfied."""
         return sum([1 for c in self.constraints if self._is_constraint_violated(c)])
 
-    def move(self):
+    def move(self, curr_energy):
         """Performs a move during the simmulated annealing algorithm."""
 
-        self._move_range_mirror(3)
+        self._move_range_shuffle(3)
 
         #if (curr_energy > 50):
         #    self._move_satisfy_random_constraint()
@@ -101,8 +101,8 @@ class NonBetweenness(Annealer):
                 # swap 2 wizards to move closer
                 self._swap_wizards(c[random.randint(0, 1)], c[2])
                 # with probability 0.5, swap the two border wizards
-                # if random.randint(0, 1) == 1:
-                #     self._swap_wizards(c[0], c[1])
+                if random.randint(0, 1) == 1:
+                    self._swap_wizards(c[0], c[1])
 
     def _move_randomly(self):
         """Swaps two wizard assignments."""
