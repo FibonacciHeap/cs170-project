@@ -29,16 +29,22 @@ class NonBetweenness(Annealer):
         self.num_constraints = num_constraints
         self.constraints = constraints
 
+
     def energy(self):
         """Calculates the number of constraints unsatisfied."""
         return sum([1 for c in self.constraints if self._is_constraint_violated(c)])
 
     def move(self):
         """Performs a move during the simmulated annealing algorithm."""
-        self._move_range_shuffle(3)
-        # self._move_satisfy_random_constraint()
+        #self._move_satisfy_random_constraint()
         #self._move_randomly()
         #self._move_adjacently()
+        self._move_range_shuffle(3)
+
+    def find_violated_constraints(self):
+        for c in self.constraints:
+            if self._is_constraint_violated(c):
+                print(c)
 
     def _move_adjacently(self):
         a = randint(0, len(self.state) - 1)
@@ -50,7 +56,6 @@ class NonBetweenness(Annealer):
             offset = choice([1, -1])
             b = a + offset
         self._swap_wizards(self.state[a], self.state[b])
-
 
     def _move_range_shuffle(self, range_len):
         """Shuffles a random, continuous subset of the current state, provided the length of the range desired to be shuffled"""
@@ -66,7 +71,6 @@ class NonBetweenness(Annealer):
         for wizard in self.state[start:end]:
             self.wiz_to_pos[wizard] = self.state.index(wizard)
 
-
     def _move_satisfy_random_constraint(self):
         """Satisfies a random unsatisfied constraint."""
         secure_random = random.SystemRandom()
@@ -78,8 +82,8 @@ class NonBetweenness(Annealer):
                 # swap 2 wizards to move closer
                 self._swap_wizards(c[random.randint(0, 1)], c[2])
                 # with probability 0.5, swap the two border wizards
-                # if random.randint(0, 1) == 1:
-                #     self._swap_wizards(c[0], c[1])
+                if random.randint(0, 1) == 1:
+                    self._swap_wizards(c[0], c[1])
 
     def _move_randomly(self):
         """Swaps two wizard assignments."""
