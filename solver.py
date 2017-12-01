@@ -32,6 +32,7 @@ def solve(num_wizards, num_constraints, wizards, constraints):
     print("Num constraints before after duplicates: ", len(constraints))
     solver = NonBetweenness(num_wizards, num_constraints, wizards, constraints)
     wizard_assignment_array = solver.anneal()
+    print("Best energy for this iteration is: " + str(solver.best_energy))
     return wizard_assignment_array
 
 """
