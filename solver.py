@@ -22,12 +22,14 @@ def solve(num_wizards, num_constraints, wizards, constraints):
     Output:
         An array of wizard names in the ordering your algorithm returns
     """
+    print("Num constraints before removing duplicates: ", len(constraints))
     for constraint in constraints:
         # sort the first two elements in the list
         constraint[0], constraint[1] = min(constraint[0], constraint[1]), \
             max(constraint[0], constraint[1])
     # remove duplicates
     constraints = [k for k,v in groupby(sorted(constraints))]
+    print("Num constraints before after duplicates: ", len(constraints))
     solver = NonBetweenness(num_wizards, num_constraints, wizards, constraints)
     wizard_assignment_array = solver.anneal()
     return wizard_assignment_array
