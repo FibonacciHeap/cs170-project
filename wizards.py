@@ -1,8 +1,13 @@
 from __future__ import print_function
 import math
-import random
+import random import (
+    randint,
+    shuffle,
+)
+
+import sys
+sys.path.append('$HOME/cs170-project/simanneal-master/simanneal')
 from simanneal import Annealer
-from random import shuffle
 
 class NonBetweenness(Annealer):
     def __init__(self, num_wizards, num_constraints, wizards, constraints):
@@ -17,8 +22,8 @@ class NonBetweenness(Annealer):
 
     def move(self):
         """Swaps two wizard assignments."""
-        a = random.randint(0, len(self.state) - 1)
-        b = random.randint(0, len(self.state) - 1)
+        a = randint(0, len(self.state) - 1)
+        b = randint(0, len(self.state) - 1)
         self.wiz_to_pos[self.state[a]], self.wiz_to_pos[self.state[b]] = self.wiz_to_pos[self.state[b]], self.wiz_to_pos[self.state[a]]
         self.state[a], self.state[b] = self.state[b], self.state[a]
 
