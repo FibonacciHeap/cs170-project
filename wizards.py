@@ -19,10 +19,10 @@ class NonBetweenness(Annealer):
         shuffle(wizards)
         super(NonBetweenness, self).__init__(wizards)
         # set hyperparameters
-        self.Tmax = 1000000.0
+        self.Tmax = 500000.0
         self.Tmin = 0.5
-        self.steps = 500000
-        self.updates = 1000
+        self.steps = 100000
+        self.updates = 10000
         # mapping for efficient position lookup by wizard name
         self.wiz_to_pos = {wizards[i] : i for i in range(len(wizards))}
         self.num_wizards = num_wizards
@@ -35,7 +35,8 @@ class NonBetweenness(Annealer):
 
     def move(self):
         """Performs a move during the simmulated annealing algorithm."""
-        self._move_satisfy_random_constraint()
+        self._move_range_shuffle(3)
+        # self._move_satisfy_random_constraint()
         #self._move_randomly()
         #self._move_adjacently()
 
