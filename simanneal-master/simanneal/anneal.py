@@ -36,9 +36,9 @@ class Annealer(object):
     __metaclass__ = abc.ABCMeta
 
     # defaults
-    Tmax = 50000.0
+    Tmax = 25000.0
     Tmin = 2.5
-    steps = 100000
+    steps = 50000
     updates = 100
     copy_strategy = 'deepcopy'
     user_exit = False
@@ -147,15 +147,15 @@ class Annealer(object):
 
         elapsed = time.time() - self.start
         if step == 0:
-            print(' Temperature        Energy    Accept   Improve     Elapsed   Remaining',
+            print(' Temperature        Energy          Best   Accept   Improve     Elapsed   Remaining',
                   file=sys.stderr)
             print('\r%12.5f  %12.2f                      %s            ' %
                   (T, E, time_string(elapsed)), file=sys.stderr, end="\r")
             sys.stderr.flush()
         else:
             remain = (self.steps - step) * (elapsed / step)
-            print('\r%12.5f  %12.2f  %7.2f%%  %7.2f%%  %s  %s\r' %
-                  (T, E, 100.0 * acceptance, 100.0 * improvement,
+            print('\r%12.5f  %12.2f  %12.2f  %7.2f%%  %7.2f%%  %s  %s\r' %
+                  (T, E, self.best_energy, 100.0 * acceptance, 100.0 * improvement,
                    time_string(elapsed), time_string(remain)), file=sys.stderr, end="\r")
             sys.stderr.flush()
 
