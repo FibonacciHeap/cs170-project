@@ -19,17 +19,10 @@ class NonBetweenness(Annealer):
         shuffle(wizards)
         super(NonBetweenness, self).__init__(wizards)
         # set hyperparameters
-<<<<<<< Updated upstream
-        self.Tmax = 3.0
-        self.Tmin = 0.5
-        self.steps = 200000
-        self.updates = 10000
-=======
         self.Tmax = 1
         self.Tmin = 0.01
         self.steps = 300000
         self.updates = 5000
->>>>>>> Stashed changes
         # mapping for efficient position lookup by wizard name
         self.wiz_to_pos = {wizards[i] : i for i in range(len(wizards))}
         self.num_wizards = num_wizards
