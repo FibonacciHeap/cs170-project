@@ -17,10 +17,10 @@ class NonBetweenness(Annealer):
         shuffle(wizards)
         super(NonBetweenness, self).__init__(wizards)
         # set hyperparameters
-        self.Tmax = 50000.0
+        self.Tmax = 600000.0
         self.Tmin = 2.5
-        self.steps = 100000
-        self.updates = 100
+        self.steps = 1000000
+        self.updates = 1000
         # mapping for efficient position lookup by wizard name
         self.wiz_to_pos = {wizards[i] : i for i in range(len(wizards))}
         self.num_wizards = num_wizards
@@ -37,8 +37,8 @@ class NonBetweenness(Annealer):
     def energy(self):
         """Calculates the number of constraints unsatisfied."""
         return sum([1 for c in self.constraints if (
-            self.wiz_to_pos[c[0]] < self.wiz_to_pos[c[2]] < self.wiz_to_pos[c[1]] or
-            self.wiz_to_pos[c[1]] < self.wiz_to_pos[c[2]] < self.wiz_to_pos[c[0]]
+            (self.wiz_to_pos[c[0]] < self.wiz_to_pos[c[2]] < self.wiz_to_pos[c[1]]) or
+            (self.wiz_to_pos[c[1]] < self.wiz_to_pos[c[2]] < self.wiz_to_pos[c[0]])
         )])
         # e = 0
         # for wizard in self.state:
