@@ -18,10 +18,10 @@ class NonBetweenness(Annealer):
         shuffle(wizards)
         super(NonBetweenness, self).__init__(wizards)
         # set hyperparameters
-        self.Tmax = 50000.0
-        self.Tmin = 2.5
-        self.steps = 100000
-        self.updates = 100
+        self.Tmax = 500.0
+        self.Tmin = 0.5
+        self.steps = 1000000
+        self.updates = 1000
         # mapping for efficient position lookup by wizard name
         self.wiz_to_pos = {wizards[i] : i for i in range(len(wizards))}
         self.num_wizards = num_wizards
@@ -46,11 +46,10 @@ class NonBetweenness(Annealer):
             if self._is_constraint_violated(c):
                 done = True
                 # swap 2 wizards to move closer
-                self.state[c[1]], self.state[c[2]] = self.state[c[2]], self.state[c[1]]
-                self.wiz_to_pos[c[1]], self.wiz_to_pos[c[2]] = self.wiz_to_pos[c[2]], self.wiz_to_pos[c[1]]
+                self._swap_wizards(c[1], c[2])
                 # with probability 0.5, swap the two border wizards
-                if random.randint(0, 1) == 1:
-                    """incomplete"""
+                # if random.randint(0, 1) == 1:
+                #     self._swap_wizards(c[0], c[1])
 
     def _move_randomly(self):
         """Swaps two wizard assignments."""
