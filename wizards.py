@@ -3,6 +3,7 @@ import math
 from random import (
     randint,
     shuffle,
+    choice,
 )
 
 import random
@@ -36,6 +37,17 @@ class NonBetweenness(Annealer):
         """Performs a move during the simmulated annealing algorithm."""
         #self._move_satisfy_random_constraint()
         self._move_randomly()
+
+    def _move_adjacently(self):
+        a = randint(0, len(self.state) - 1)
+        if a == 0:
+            b = a + 1
+        elif a == len(self.state) - 1:
+            b = a - 1
+        else:
+            offset = choice[1, -1]
+            b = a + offset
+
 
     def _move_satisfy_random_constraint(self):
         """Satisfies a random unsatisfied constraint."""
