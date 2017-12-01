@@ -31,9 +31,9 @@ class NonBetweenness(Annealer):
 
     def energy(self):
         """Calculates the number of constraints unsatisfied."""
-        return sum([1 for c in constraints if (
-            self.wiz_to_pos[0] < self.wiz_to_pos[2] < self.wiz_to_pos[1] or
-            self.wiz_to_pos[1] < self.wiz_to_pos[2] < self.wiz_to_pos[0]
+        return sum([1 for c in self.constraints if (
+            self.wiz_to_pos[c[0]] < self.wiz_to_pos[c[2]] < self.wiz_to_pos[c[1]] or
+            self.wiz_to_pos[c[1]] < self.wiz_to_pos[c[2]] < self.wiz_to_pos[c[0]]
         )])
         # e = 0
         # for wizard in self.state:
