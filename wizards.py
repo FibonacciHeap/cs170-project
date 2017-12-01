@@ -35,8 +35,8 @@ class NonBetweenness(Annealer):
 
     def move(self):
         """Performs a move during the simmulated annealing algorithm."""
-        #self._move_satisfy_random_constraint()
-        self._move_randomly()
+        self._move_satisfy_random_constraint()
+        #self._move_randomly()
 
     def _move_adjacently(self):
         a = randint(0, len(self.state) - 1)
@@ -58,14 +58,22 @@ class NonBetweenness(Annealer):
             if self._is_constraint_violated(c):
                 done = True
                 # swap 2 wizards to move closer
-                # NOTE: incomplete
+                self.state[c[1]], self.state[c[2]] = self.state[c[2]], self.state[c[1]]
+                self.wiz_to_pos[c[1]], self.wiz_to_pos[c[2]] = self.wiz_to_pos[c[2]], self.wiz_to_pos[c[1]]
+                # with probability 0.5, swap the two border wizards
+                if random.randint(0, 1) == 1:
+                    """incomplete"""
 
     def _move_randomly(self):
         """Swaps two wizard assignments."""
-        a = randint(0, len(self.state) - 1)
-        b = randint(0, len(self.state) - 1)
-        self.wiz_to_pos[self.state[a]], self.wiz_to_pos[self.state[b]] = self.wiz_to_pos[self.state[b]], self.wiz_to_pos[self.state[a]]
-        self.state[a], self.state[b] = self.state[b], self.state[a]
+        a, b = randint(0, len(self.state) - 1), randint(0, len(self.state) - 1)
+        wiz1, wiz2 = self.state[a], self.state[b]
+        self._swap_wizards(wiz1, wiz2)
+
+    def _swap_wizards(self, wiz1, wiz2):
+        pos1, pos2 = self.wiz_to_pos[wiz1], self.wiz_to_pos[wiz2]
+        self.state[pos1], self.state[pos2] = self.state[pos2], self.state[pos1]
+        self.wiz_to_pos[wiz1], self.wiz_to_pos[wiz2] = self.wiz_to_pos[wiz2], self.wiz_to_pos[wiz1]
 
     def _is_constraint_violated(self, c):
         return (
