@@ -35,8 +35,9 @@ class NonBetweenness(Annealer):
 
     def move(self):
         """Performs a move during the simmulated annealing algorithm."""
-        self._move_satisfy_random_constraint()
+        # self._move_satisfy_random_constraint()
         #self._move_randomly()
+        self._move_adjacently()
 
     def _move_adjacently(self):
         a = randint(0, len(self.state) - 1)
@@ -45,7 +46,7 @@ class NonBetweenness(Annealer):
         elif a == len(self.state) - 1:
             b = a - 1
         else:
-            offset = choice[1, -1]
+            offset = choice([1, -1])
             b = a + offset
         _swap_wizards(self.state[a], self.state[b])
 
