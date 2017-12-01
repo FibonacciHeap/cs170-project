@@ -5,6 +5,7 @@ from random import (
     shuffle,
 )
 
+import random
 import os
 import sys
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -27,27 +28,38 @@ class NonBetweenness(Annealer):
         self.num_constraints = num_constraints
         self.constraints = constraints
 
+    def energy(self):
+        """Calculates the number of constraints unsatisfied."""
+        return sum([1 for c in self.constraints if self._is_constraint_violated(c)])
+
     def move(self):
+        """Performs a move during the simmulated annealing algorithm."""
+        #self._move_satisfy_random_constraint()
+        self._move_randomly()
+
+    def _move_satisfy_random_constraint(self):
+        """Satisfies a random unsatisfied constraint."""
+        secure_random = random.SystemRandom()
+        done = False
+        while not done:
+            c = secure_random.choice(self.constraints)
+            if self._is_constraint_violated(c):
+                done = True
+                # swap 2 wizards to move closer
+                # NOTE: incomplete
+
+    def _move_randomly(self):
         """Swaps two wizard assignments."""
         a = randint(0, len(self.state) - 1)
         b = randint(0, len(self.state) - 1)
         self.wiz_to_pos[self.state[a]], self.wiz_to_pos[self.state[b]] = self.wiz_to_pos[self.state[b]], self.wiz_to_pos[self.state[a]]
         self.state[a], self.state[b] = self.state[b], self.state[a]
 
-    def energy(self):
-        """Calculates the number of constraints unsatisfied."""
-        return sum([1 for c in self.constraints if (
-            self.wiz_to_pos[c[0]] < self.wiz_to_pos[c[2]] < self.wiz_to_pos[c[1]] or
-            self.wiz_to_pos[c[1]] < self.wiz_to_pos[c[2]] < self.wiz_to_pos[c[0]]
-        )])
-        # e = 0
-        # for wizard in self.state:
-        #     for c in self.constraints:
-        #         x, y, z = self.wiz_to_pos[c[0]], self.wiz_to_pos[c[1]], self.wiz_to_pos[c[2]]
-        #         if wizard == c[2] and (x < z < y or y < z < x):
-        #             e += 1
-        # return e
-
+    def _is_constraint_violated(self, c):
+        return (
+            (self.wiz_to_pos[c[0]] < self.wiz_to_pos[c[2]] < self.wiz_to_pos[c[1]]) or
+            (self.wiz_to_pos[c[1]] < self.wiz_to_pos[c[2]] < self.wiz_to_pos[c[0]])
+        )
 
 # if __name__ == '__main__':
 #
