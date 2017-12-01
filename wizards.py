@@ -5,9 +5,11 @@ from random import (
     shuffle,
 )
 
+import os
 import sys
-sys.path.insert('$HOME/cs170-project/simanneal-master/simanneal')
-from simanneal import Annealer
+dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.insert(0, dir_path + '/simanneal-master/simanneal')
+from anneal import Annealer
 
 class NonBetweenness(Annealer):
     def __init__(self, num_wizards, num_constraints, wizards, constraints):
