@@ -48,7 +48,7 @@ class NonBetweenness(Annealer):
         else:
             offset = choice([1, -1])
             b = a + offset
-        _swap_wizards(self.state[a], self.state[b])
+        self._swap_wizards(self.state[a], self.state[b])
 
     def _move_satisfy_random_constraint(self):
         """Satisfies a random unsatisfied constraint."""
