@@ -50,6 +50,22 @@ class NonBetweenness(Annealer):
             b = a + offset
         self._swap_wizards(self.state[a], self.state[b])
 
+
+    def _move_range_shuffle(self, range_len):
+        """Shuffles a random, continuous subset of the current state, provided the length of the range desired to be shuffled"""
+        #start1 = randint(range_len, len(self.state) - range_len)
+        start = randint(0, len(self.state) - range_len)
+        #range_list = choice([[start1, start1 - range_len], [start2, start2 + range_len]])
+        end = start + range_len
+
+        copy_state = self.state[start:end]
+        random.shuffle(copy_state)
+        self.state[start:end] = copy_state
+
+        for wizard in self.state[start:end]:
+            self.wiz_to_pos[wizard] = self.state.index(wizard)
+
+
     def _move_satisfy_random_constraint(self):
         """Satisfies a random unsatisfied constraint."""
         secure_random = random.SystemRandom()
