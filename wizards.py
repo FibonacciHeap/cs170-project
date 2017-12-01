@@ -19,15 +19,23 @@ class NonBetweenness(Annealer):
         shuffle(wizards)
         super(NonBetweenness, self).__init__(wizards)
         # set hyperparameters
-        self.Tmax = 1000000.0
+        self.Tmax = 3.0
         self.Tmin = 0.5
-        self.steps = 500000
+        self.steps = 20000
         self.updates = 1000
+        #randomize_hyperparams()
+
         # mapping for efficient position lookup by wizard name
         self.wiz_to_pos = {wizards[i] : i for i in range(len(wizards))}
         self.num_wizards = num_wizards
         self.num_constraints = num_constraints
         self.constraints = constraints
+
+    def randomize_hyperparams(self):
+        self.Tmax = random.uniform(2.5, 5)
+        self.Tmin = random.uniform(0.01, 1)
+        self.steps = randint(20000, 200000)
+        self.updates = 100
 
     def energy(self):
         """Calculates the number of constraints unsatisfied."""
@@ -35,9 +43,13 @@ class NonBetweenness(Annealer):
 
     def move(self):
         """Performs a move during the simmulated annealing algorithm."""
-        self._move_satisfy_random_constraint()
-        #self._move_randomly()
-        #self._move_adjacently()
+
+        self._move_range_mirror(3)
+
+        #if (curr_energy > 50):
+        #    self._move_satisfy_random_constraint()
+        #else:
+        #    self._move_range_shuffle(3)
 
     def _move_adjacently(self):
         a = randint(0, len(self.state) - 1)
@@ -49,7 +61,6 @@ class NonBetweenness(Annealer):
             offset = choice([1, -1])
             b = a + offset
         self._swap_wizards(self.state[a], self.state[b])
-
 
     def _move_range_shuffle(self, range_len):
         """Shuffles a random, continuous subset of the current state, provided the length of the range desired to be shuffled"""
@@ -65,6 +76,19 @@ class NonBetweenness(Annealer):
         for wizard in self.state[start:end]:
             self.wiz_to_pos[wizard] = self.state.index(wizard)
 
+    def _move_range_mirror(self, range_len):
+        """Shuffles a random, continuous subset of the current state, provided the length of the range desired to be shuffled"""
+        #start1 = randint(range_len, len(self.state) - range_len)
+        start = randint(0, len(self.state) - range_len)
+        #range_list = choice([[start1, start1 - range_len], [start2, start2 + range_len]])
+        end = start + range_len
+
+        copy_state = self.state[start:end]
+        copy_state.reverse()
+        self.state[start:end] = copy_state
+
+        for wizard in self.state[start:end]:
+            self.wiz_to_pos[wizard] = self.state.index(wizard)
 
     def _move_satisfy_random_constraint(self):
         """Satisfies a random unsatisfied constraint."""

@@ -23,6 +23,7 @@ def solve(num_wizards, num_constraints, wizards, constraints):
         An array of wizard names in the ordering your algorithm returns
     """
     print("Num constraints before removing duplicates: ", len(constraints))
+
     for constraint in constraints:
         # sort the first two elements in the list
         constraint[0], constraint[1] = min(constraint[0], constraint[1]), \
@@ -31,6 +32,10 @@ def solve(num_wizards, num_constraints, wizards, constraints):
     constraints = [k for k,v in groupby(sorted(constraints))]
     print("Num constraints before after duplicates: ", len(constraints))
     solver = NonBetweenness(num_wizards, num_constraints, wizards, constraints)
+    #try to find best hyperparameters
+    #print("Best Parameters:")
+    #print(solver.auto(1))
+    #print("Annealer:")
     wizard_assignment_array = solver.anneal()
     print("Best energy for this iteration is: " + str(solver.best_energy))
     return wizard_assignment_array
