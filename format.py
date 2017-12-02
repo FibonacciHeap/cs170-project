@@ -14,8 +14,10 @@ if len(sys.argv) < 2:
 path = sys.argv[1]
 # print path
 for filename in os.listdir(path):
-    with open(path + '/' + filename , 'r+') as file:
+    contents = ''
+    with open(path + '/' + filename , 'r') as file:
         contents = file.read()
+    with open(path + '/' + filename , 'w') as file:
         # print 'contents: ', contents
         arr = (find_between(contents, '[', ']')[1: -1]).split(',')
         # print 'arr: ', arr
