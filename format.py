@@ -17,6 +17,8 @@ for filename in os.listdir(path):
     contents = ''
     with open(path + '/' + filename , 'r') as file:
         contents = file.read()
+        if contents[0] != '[':
+            continue
     with open(path + '/' + filename , 'w') as file:
         # print 'contents: ', contents
         arr = (find_between(contents, '[', ']')[1: -1]).split(',')
