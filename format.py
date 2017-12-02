@@ -19,23 +19,17 @@ path = sys.argv[1].encode('utf-8').strip()
 for filename in os.listdir(path):
     contents = ''
     with open(path + '/' + filename , 'r') as file:
-        # contents = file.read()
         contents = file.readlines()
-        # if contents[0] != '[':
-        #     continue
+        multi = True
         if len(contents) == 1:
-            continue
+            contents = contents[0]
+            multi = False
     with open(path + '/' + filename , 'w') as file:
-        file.write('[')
-        # # print 'contents: ', contents
-        # arr = (find_between(contents, '[', ']')[1: -1]).split(',')
-        # # print 'arr: ', arr
-        # ordering = [a.strip().strip("'").strip() for a in arr]
-        # # print 'ordering: ', ordering
-        # for wizard in ordering:
-        #     # print wizard
-        #     file.write(wizard + '\n')
-        for i in range(len(contents) - 1):
-            # print wizard
-            file.write(contents[i] + ', ')
-        file.write(contents[len(contents) - 1] + ']')
+        if multi:
+            for wizard in contents:
+                file.write(wizard.rstrip() + ' ')
+        else:
+            arr = (find_between(contents, '[', ']')[1: -1]).split(',')
+            ordering = [a.strip().strip("'").strip() for a in arr]
+            for wizard in ordering:
+                file.write(wizard + ' ')
