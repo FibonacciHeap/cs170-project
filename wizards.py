@@ -66,9 +66,8 @@ class NonBetweenness(Annealer):
 
     def _save_solution(self):
         print("FOUND OPTIMAL:", self.state)
-        filepath = 'phase3_outputs/' + self.outfile
-        print("saving to file...", filepath)
-        with open(filepath, 'w') as file:
+        print("saving to file...", self.outfile)
+        with open(self.outfile, 'w') as file:
             for w in self.state:
                 file.write("{0} ".format(w))
 

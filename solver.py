@@ -39,7 +39,7 @@ def solve(num_wizards, num_constraints, wizards, constraints, identifier, outfil
     while best_energy != 0:
         solver = NonBetweenness(identifier, num_wizards, num_constraints, wizards, constraints, outfile)
         print("Initial energy is " + str(solver.energy()))
-        solver.print_violated_constraints()
+        # solver.print_violated_constraints()
         wizard_assignment_array = solver.anneal()
         best_state, best_energy = wizard_assignment_array
         print("\nBest energy for this iteration is: " + str(best_energy))
