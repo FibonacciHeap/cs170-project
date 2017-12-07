@@ -14,14 +14,14 @@ sys.path.insert(0, dir_path + '/simanneal-master/simanneal')
 from anneal import Annealer
 
 class NonBetweenness(Annealer):
-    def __init__(self, identifier, num_wizards, num_constraints, wizards, constraints):
+    def __init__(self, identifier, num_wizards, num_constraints, wizards, constraints, outfile):
         # NOTE: state == wizards
-        #shuffle(wizards) # do not shuffle because we may start with an ordering
+        # shuffle(wizards) # do not shuffle because we may start with an ordering
         super(NonBetweenness, self).__init__(wizards)
         # set hyperparameters
-        self.Tmax = 0.34
-        self.Tmin = 0.008
-        self.steps = 180000
+        self.Tmax = 2.0
+        self.Tmin = 0.08
+        self.steps = 100000
         self.updates = 1500
         # self.randomize_hyperparams() # use this for exploring
 
@@ -32,6 +32,7 @@ class NonBetweenness(Annealer):
         self.num_constraints = num_constraints
         self.constraints = constraints
         self.wizards = wizards
+        self.outfile = outfile
 
     def randomize_hyperparams(self):
         self.Tmax = random.uniform(2.5, 5)
@@ -51,6 +52,8 @@ class NonBetweenness(Annealer):
     def move(self):
         """Performs a move during the simmulated annealing algorithm."""
         self._move_range_shuffle(3)
+        self._move_satisfy_random_constraint()
+        # self._move_range_shuffle(3)
         #if (curr_energy > 50):
         #    self._move_satisfy_random_constraint()
         #else:
@@ -63,13 +66,11 @@ class NonBetweenness(Annealer):
 
     def _save_solution(self):
         print("FOUND OPTIMAL:", self.state)
-        filepath = 'solutions/inputs' + str(self.num_wizards) + '/'
-        filename = 'input_' + str(self.num_wizards) + "_" + \
-            str(self.identifier) + ".out"
-        print("saving to file...", filename)
-        with open(filepath + filename , 'w') as file:
+        filepath = 'phase3_outputs/' + self.outfile
+        print("saving to file...", filepath)
+        with open(filepath, 'w') as file:
             for w in self.state:
-                file.write(w + '\n')
+                file.write("{0} ".format(w))
 
     def _move_adjacently(self):
         a = randint(0, len(self.state) - 1)

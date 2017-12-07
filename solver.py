@@ -9,7 +9,7 @@ from wizards import NonBetweenness
 ======================================================================
 """
 
-def solve(num_wizards, num_constraints, wizards, constraints, identifier):
+def solve(num_wizards, num_constraints, wizards, constraints, identifier, outfile):
     """
     Write your algorithm here.
     Input:
@@ -37,7 +37,7 @@ def solve(num_wizards, num_constraints, wizards, constraints, identifier):
     print("Num constraints before after duplicates: ", len(constraints))
     best_energy = 100 # arbitrary number > 0
     while best_energy != 0:
-        solver = NonBetweenness(identifier, num_wizards, num_constraints, wizards, constraints)
+        solver = NonBetweenness(identifier, num_wizards, num_constraints, wizards, constraints, outfile)
         print("Initial energy is " + str(solver.energy()))
         solver.print_violated_constraints()
         wizard_assignment_array = solver.anneal()
@@ -81,5 +81,5 @@ if __name__=="__main__":
     args = parser.parse_args()
 
     num_wizards, num_constraints, wizards, constraints, identifier = read_input(args.input_file)
-    solution = solve(num_wizards, num_constraints, wizards, constraints, identifier)
+    solution = solve(num_wizards, num_constraints, wizards, constraints, identifier, args.output_file)
     write_output(args.output_file, solution)
